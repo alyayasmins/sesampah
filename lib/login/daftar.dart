@@ -234,7 +234,7 @@ class _DaftarState extends State<Daftar> {
               SizedBox(
                 height: 60,
                 width: 388,
-                child: ElevatedButton(
+                child: ElevatedButton( 
                   onPressed: () {
                     Navigator.push(
                         context,

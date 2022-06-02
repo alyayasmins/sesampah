@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:sesampah/pages/lokasi.dart';
+import 'package:sesampah/pages/tarik_sampah/tarik.dart';
+import 'package:sesampah/pages/tukar_sampah/tukar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -107,8 +109,15 @@ class _HomePageState extends State<HomePage> {
                             shadowColor: Colors.grey,
                             elevation: 5,
                             primary: Colors.white),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const TukarSampah()));
+                        },
                         child: Container(
+                          height: 90,
+                          width: 90,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image:
@@ -144,7 +153,12 @@ class _HomePageState extends State<HomePage> {
                             shadowColor: Colors.grey,
                             elevation: 5,
                             primary: Colors.white),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const TarikSampah()));
+                        },
                         child: Container(
                           decoration: const BoxDecoration(
                             image: DecorationImage(
@@ -182,9 +196,9 @@ class _HomePageState extends State<HomePage> {
                             primary: Colors.white),
                         onPressed: () {
                           Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Location()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Location()));
                         },
                         child: Container(
                           decoration: const BoxDecoration(

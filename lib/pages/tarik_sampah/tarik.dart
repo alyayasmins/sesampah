@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sesampah/pages/home.dart';
 
 class TarikSampah extends StatefulWidget {
   const TarikSampah({Key? key}) : super(key: key);
@@ -24,7 +25,10 @@ class _TarikSampahState extends State<TarikSampah> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePage(title: '',)));
+          },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
         ),
