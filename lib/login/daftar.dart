@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/home.dart';
+import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'package:sesampah/login/login.dart';
-import 'package:sesampah/pages/home.dart';
 
 class Daftar extends StatefulWidget {
   const Daftar({
@@ -234,12 +233,12 @@ class _DaftarState extends State<Daftar> {
               SizedBox(
                 height: 60,
                 width: 388,
-                child: ElevatedButton( 
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const HomePage(title: '',)));
+                            builder: (context) => const BattomBar()));
                   },
                   style: ElevatedButton.styleFrom(
                     primary: const Color(0xFF375969),

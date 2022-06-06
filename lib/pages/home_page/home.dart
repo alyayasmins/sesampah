@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:ff_navigation_bar/ff_navigation_bar.dart';
-import 'package:sesampah/pages/lokasi.dart';
+import 'package:sesampah/pages/location/lokasi.dart';
 import 'package:sesampah/pages/tarik_sampah/tarik.dart';
 import 'package:sesampah/pages/tukar_sampah/tukar.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+class PageHome extends StatefulWidget {
+  const PageHome({Key? key, required this.title}) : super(key: key);
+  final String? title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<PageHome> createState() => _PageHomeState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int selectedIndex = 0;
-
+class _PageHomeState extends State<PageHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -250,40 +247,7 @@ class _HomePageState extends State<HomePage> {
                     //     ),
                     //   )
                     // )
-                  ]))
-        ],
-      ),
-      bottomNavigationBar: FFNavigationBar(
-        theme: FFNavigationBarTheme(
-          barBackgroundColor: Colors.white,
-          selectedItemBorderColor: Colors.transparent,
-          selectedItemBackgroundColor: const Color(0XFF5C94AF),
-          selectedItemIconColor: Colors.white,
-          selectedItemLabelColor: Colors.black,
-          showSelectedItemShadow: false,
-          barHeight: 70,
-        ),
-        selectedIndex: selectedIndex,
-        onSelectTab: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        items: [
-          FFNavigationBarItem(
-            iconData: Icons.home,
-            label: 'Beranda',
-          ),
-          FFNavigationBarItem(
-            iconData: Icons.assignment,
-            label: 'Pesanan',
-            selectedBackgroundColor: const Color(0XFF5C94AF),
-          ),
-          FFNavigationBarItem(
-            iconData: Icons.person,
-            label: 'Akun',
-            selectedBackgroundColor: const Color(0XFF5C94AF),
-          ),
+                  ])),
         ],
       ),
     );

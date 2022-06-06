@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/home.dart';
-import 'package:sesampah/pages/tukar_sampah/widget_helper.dart';
-
-int catIndex = 0;
 
 class TukarSampah extends StatefulWidget {
   const TukarSampah({Key? key}) : super(key: key);
@@ -12,9 +8,19 @@ class TukarSampah extends StatefulWidget {
 }
 
 class _TukarSampahState extends State<TukarSampah> {
+  List<String> items = [
+    "Kertas",
+    "Botol",
+    "Plastik",
+    "Logam",
+    "Minyak Jelantah",
+    "Sampah Campuran"
+  ];
+
+  int current = 0;
+
   @override
   Widget build(BuildContext context) {
-    var index;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -29,182 +35,98 @@ class _TukarSampahState extends State<TukarSampah> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const HomePage(
-                          title: '',
-                        )));
-          },
+          onPressed: () {},
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+      body: Container(
+        margin: const EdgeInsets.all(20),
+        width: double.infinity,
+        height: double.infinity,
         child: Column(
           children: [
+            SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: items.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (ctx, index) {
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              current = index;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.all(5),
+                            width: 80,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: current == index
+                                  ? const Color(0xFFE8EEF6)
+                                  : Colors.white,
+                              borderRadius: current == index
+                                  ? BorderRadius.circular(10)
+                                  : BorderRadius.circular(10),
+                              // border: current == index
+                              //     ? Border.all(
+                              //         color: Colors.deepPurpleAccent, width: 2)
+                              //     : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                items[index],
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w500,
+                                    color: current == index
+                                        ? Colors.black
+                                        : Colors.grey),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Visibility(
+                        //     visible: current == index,
+                        //     child: Container(
+                        //       width: 5,
+                        //       height: 5,
+                        //       decoration: const BoxDecoration(
+                        //           color: Color.fromARGB(255, 7, 241, 105),
+                        //           shape: BoxShape.circle),
+                        //     ))
+                      ],
+                    );
+                  }),
+            ),
             Container(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      child: Container(
-                        height: 150,
-                        width: 120,
-                        margin:
-                            const EdgeInsets.only(left: 15, right: 15, top: 17),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              //catIndex = helper.categoryList
-                            },
-                            style: index == catIndex
-                                ? WidgetHelper().btnCategoryStyle(true)
-                                : WidgetHelper().btnCategoryStyle(false),
-                            child: Column(
-                              children: [
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: const [
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Icon(
-                                        Icons.insert_drive_file,
-                                        color: Color(0XFF6FB2D2),
-                                      ),
-                                      SizedBox(
-                                        height: 55,
-                                      ),
-                                      Text(
-                                        "Kertas",
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0XFF6FB2D2),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ),
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        height: 150,
-                        width: 120,
-                        margin:
-                            const EdgeInsets.only(left: 2, right: 2, top: 17),
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            style: index == catIndex
-                                ? WidgetHelper().btnCategoryStyle(true)
-                                : WidgetHelper().btnCategoryStyle(false),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Icon(Icons.insert_drive_file,
-                                    color: Color(0XFF6FB2D2)),
-                                SizedBox(
-                                  height: 55,
-                                ),
-                                Text(
-                                  "Kertas",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0XFF6FB2D2),
-                                  ),
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        height: 150,
-                        width: 120,
-                        margin:
-                            const EdgeInsets.only(left: 15, right: 2, top: 17),
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            style: index == catIndex
-                                ? WidgetHelper().btnCategoryStyle(true)
-                                : WidgetHelper().btnCategoryStyle(false),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Icon(Icons.insert_drive_file,
-                                    color: Color(0XFF6FB2D2)),
-                                SizedBox(
-                                  height: 55,
-                                ),
-                                Text(
-                                  "Kertas",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0XFF6FB2D2),
-                                  ),
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        height: 150,
-                        width: 120,
-                        margin:
-                            const EdgeInsets.only(left: 15, right: 15, top: 17),
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            style: index == catIndex
-                                ? WidgetHelper().btnCategoryStyle(true)
-                                : WidgetHelper().btnCategoryStyle(false),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Icon(Icons.insert_drive_file,
-                                    color: Color(0XFF6FB2D2)),
-                                SizedBox(
-                                  height: 55,
-                                ),
-                                Text(
-                                  "Kertas",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0XFF6FB2D2),
-                                  ),
-                                )
-                              ],
-                            )),
-                      ),
-                    )
-                  ],
-                ),
+              margin: const EdgeInsets.only(top: 30),
+              width: double.infinity,
+              height: 550,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    items[current],
+                    style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30,
+                        color: Colors.deepPurple),
+                  ),
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/home.dart';
+import 'package:sesampah/login/authentication.dart';
+import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'package:sesampah/login/login.dart';
+import 'package:sesampah/pages/home_page/home.dart';
 
 class Masuk extends StatefulWidget {
   const Masuk({
@@ -13,64 +14,16 @@ class Masuk extends StatefulWidget {
 }
 
 class _MasukState extends State<Masuk> {
+  final GlobalKey<FormState> globalFormKey = GlobalKey();
+
+  bool _obscureText = true;
   bool _isHidePassword = true;
-//   final _emailController = TextEditingController();
-//   final _passwordController = TextEditingController();
 
-//   var fSnackBar = const SnackBar(
-//     content: Text("Kolom Email & Password Harus Diisi!"),
-//   );
+  TextEditingController? emailController = TextEditingController();
+  TextEditingController? passController = TextEditingController();
 
-//   var sSnackBar = const SnackBar(
-//     content: Text("Kolom Password Harus Diisi!"),
-//   );
-
-//   var tSnackBar = const SnackBar(
-//     content: Text("Kolom Email Harus Diisi!"),
-//   );
-
-//   Future signIn() async {
-//     try {
-//       if (_emailController.text.isNotEmpty &
-//           _passwordController.text.isNotEmpty) {
-//         await FirebaseAuth.instance.signInWithEmailAndPassword(
-//           email: _emailController.text.trim(),
-//           password: _passwordController.text.trim(),
-//         );
-//       } else if (_emailController.text.isNotEmpty &
-//           _passwordController.text.isNotEmpty) {
-//         ScaffoldMessenger.of(context).showSnackBar(sSnackBar);
-//       } else if (_emailController.text.isNotEmpty &
-//           _passwordController.text.isNotEmpty) {
-//         ScaffoldMessenger.of(context).showSnackBar(tSnackBar);
-//       } else if (_emailController.text.isNotEmpty &
-//           _passwordController.text.isNotEmpty) {
-//         ScaffoldMessenger.of(context).showSnackBar(fSnackBar);
-//       }
-//     } catch (e) {
-//       showDialog<void>(
-//         context: context,
-//         barrierDismissible: false,
-//         builder: (BuildContext context){
-//         return AlertDialog(
-//           title: const Text("Teradi Error"),
-//           content: const SingleChildScrollView(
-//             child: Text("Email dan Kata Sandi yang Anda Masukkan Tidak valid, Coba Masukkan Email dan Kata Sandi yang valid."),
-//           ),
-//           actions: <Widget>[
-//               TextButton(
-//                 child: const Text('Got it'),
-//                 onPressed: () {
-//                   Navigator.of(context).pop();
-//                   _emailController.clear();
-//                   _passwordController.clear();
-//                 },
-//               ),
-//             ],
-//       );});
-//       };
-//     }
-//   }
+  String? email;
+  String? password;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -109,39 +62,55 @@ class _MasukState extends State<Masuk> {
             margin: const EdgeInsets.only(top: 40),
             child: Column(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 20),
-                      child: const Text(
-                        "Email",
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            color: Colors.black),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Form(
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: TextFormField(
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
-                                      hintText: "Masukkan Email",
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                ))
-                          ],
+                Form(
+                  key: globalFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        child: const Text(
+                          "Email",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Colors.black),
                         ),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Form(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.emailAddress,
+                                    onSaved: (val) {
+                                      email = val!;
+                                    },
+                                    controller: emailController,
+                                    decoration: InputDecoration(
+                                      hintText: "Masukkan Email",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Email tidak boleh kosong!';
+                                      } else if (!value.contains('@')) {
+                                        return 'Format email salah';
+                                      }
+                                      return null;
+                                    },
+                                  ))
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 5,
@@ -167,29 +136,40 @@ class _MasukState extends State<Masuk> {
                             Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: TextFormField(
-                                  obscureText: _isHidePassword,
-                                  autofocus: false,
-                                  initialValue: '',
-                                  keyboardType: TextInputType.text,
-                                  decoration: InputDecoration(
-                                      hintText: "Masukkan Kata Sandi",
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          _togglePasswordVisibility();
-                                        },
-                                        child: Icon(
-                                          _isHidePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: _isHidePassword
-                                              ? Colors.grey
-                                              : Colors.blue,
-                                        ),
-                                      )),
-                                ))
+                                    obscureText: _isHidePassword,
+                                    autofocus: false,
+                                    keyboardType: TextInputType.text,
+                                    onSaved: (val) {
+                                      password = val!;
+                                    },
+                                    controller: passController,
+                                    decoration: InputDecoration(
+                                        hintText: "Masukkan Kata Sandi",
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            _togglePasswordVisibility();
+                                            _obscureText = !_obscureText;
+                                          },
+                                          child: Icon(
+                                            _isHidePassword
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: _isHidePassword
+                                                ? Colors.grey
+                                                : Colors.blue,
+                                          ),
+                                        )),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Password tidak boleh kosong';
+                                      } else if (value.length < 6) {
+                                        return 'Password kurang dari 6!';
+                                      }
+                                      return null;
+                                    }))
                           ],
                         ),
                       ),
@@ -209,10 +189,13 @@ class _MasukState extends State<Masuk> {
                 width: 388,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage(title: '',)));
+                    setState(() {
+                      email = emailController!.text;
+                      password = passController!.text;
+                    });
+                    debugPrint("Email:" + email!);
+                    debugPrint("Password: " + password!);
+                    LoginButton();
                   },
                   style: ElevatedButton.styleFrom(
                     primary: const Color(0xFF375969),
@@ -233,5 +216,25 @@ class _MasukState extends State<Masuk> {
         ],
       ),
     );
+  }
+
+  void LoginButton() {
+    final form = globalFormKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      AuthenticationHelper()
+          .signInWithEmail(email: email!, password: password!)
+          .then((result) async {
+        if (result == null) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Berhasil"),));
+          await Future.delayed(const Duration(seconds: 5), () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const BattomBar()));
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Email atau Password Salah!"),));
+        }
+      });
+    }
   }
 }
