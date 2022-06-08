@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:sesampah/pages/tukar_sampah/campuran.dart';
+import 'package:sesampah/pages/tukar_sampah/jelantah.dart';
+import 'package:sesampah/pages/tukar_sampah/kertas.dart';
+import 'package:sesampah/pages/tukar_sampah/logam.dart';
+import 'package:sesampah/pages/tukar_sampah/plastik.dart';
+
+import 'botol.dart';
 
 class TukarSampah extends StatefulWidget {
   const TukarSampah({Key? key}) : super(key: key);
@@ -7,7 +16,8 @@ class TukarSampah extends StatefulWidget {
   State<TukarSampah> createState() => _TukarSampahState();
 }
 
-class _TukarSampahState extends State<TukarSampah> {
+class _TukarSampahState extends State<TukarSampah>
+    with SingleTickerProviderStateMixin {
   List<String> items = [
     "Kertas",
     "Botol",
@@ -18,6 +28,11 @@ class _TukarSampahState extends State<TukarSampah> {
   ];
 
   int current = 0;
+  get tabcontrol => null;
+
+  bool Checkbox = false;
+  bool Checkbox2 = false;
+  bool Checkbox3 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,91 +55,128 @@ class _TukarSampahState extends State<TukarSampah> {
           color: Colors.black,
         ),
       ),
-      body: Container(
-        margin: const EdgeInsets.all(20),
-        width: double.infinity,
-        height: double.infinity,
+      body: DefaultTabController(
+        length: 6,
         child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 100,
-              child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: items.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (ctx, index) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              current = index;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.all(5),
-                            width: 80,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: current == index
-                                  ? const Color(0xFFE8EEF6)
-                                  : Colors.white,
-                              borderRadius: current == index
-                                  ? BorderRadius.circular(10)
-                                  : BorderRadius.circular(10),
-                              // border: current == index
-                              //     ? Border.all(
-                              //         color: Colors.deepPurpleAccent, width: 2)
-                              //     : null,
-                            ),
-                            child: Center(
-                              child: Text(
-                                items[index],
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w500,
-                                    color: current == index
-                                        ? Colors.black
-                                        : Colors.grey),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Visibility(
-                        //     visible: current == index,
-                        //     child: Container(
-                        //       width: 5,
-                        //       height: 5,
-                        //       decoration: const BoxDecoration(
-                        //           color: Color.fromARGB(255, 7, 241, 105),
-                        //           shape: BoxShape.circle),
-                        //     ))
-                      ],
-                    );
-                  }),
-            ),
+          children: <Widget>[
             Container(
-              margin: const EdgeInsets.only(top: 30),
-              width: double.infinity,
-              height: 550,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 10,
+              constraints: const BoxConstraints.expand(height: 60),
+              child: TabBar(
+                indicatorSize: TabBarIndicatorSize.tab,
+                controller: tabcontrol,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+                isScrollable: true,
+                unselectedLabelColor: const Color(0xff6FB2D2),
+                indicator: const BubbleTabIndicator(
+                  indicatorHeight: 52,
+                  indicatorColor: Color(0xffE8EEF6),
+                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                  indicatorRadius: 5,
+                ),
+                tabs: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 228, 221, 221))),
+                    child: const Text(
+                      'Kertas',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff6FB2D2)),
+                    ),
                   ),
-                  Text(
-                    items[current],
-                    style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 30,
-                        color: Colors.deepPurple),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 228, 221, 221))),
+                    child: const Text(
+                      'Botol',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff6FB2D2)),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 228, 221, 221))),
+                    child: const Text(
+                      'Plastik',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff6FB2D2)),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 228, 221, 221))),
+                    child: const Text(
+                      'Logam',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff6FB2D2)),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 228, 221, 221))),
+                    child: const Text(
+                      'Jelantah',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff6FB2D2)),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 228, 221, 221))),
+                    child: const Text(
+                      'Campuran',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff6FB2D2)),
+                    ),
                   ),
                 ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                child: const TabBarView(children: [
+                  SubListKertas(),
+                  SubListBotol(),
+                  SubListPlastik(),
+                  SubListLogam(),
+                  SubListJelantah(),
+                  SubListCampuran(),
+                ]),
               ),
             ),
           ],
