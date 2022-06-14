@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/home_page/bottom_bar.dart';
+import 'package:sesampah/login/authentication.dart';
+import 'package:sesampah/login/login.dart';
 
 class ProfilePerson extends StatefulWidget {
   const ProfilePerson({Key? key}) : super(key: key);
@@ -9,6 +11,7 @@ class ProfilePerson extends StatefulWidget {
 }
 
 class _ProfilePersonState extends State<ProfilePerson> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,14 +27,6 @@ class _ProfilePersonState extends State<ProfilePerson> {
               color: Colors.black),
         ),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const BattomBar()));
-          },
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-        ),
       ),
       body: Column(
         children: [
@@ -87,47 +82,197 @@ class _ProfilePersonState extends State<ProfilePerson> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.home_rounded),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Atur Alamat",
-                          style: TextStyle(
+                    InkWell(
+                      onTap: () {},
+                      child: Row(
+                        children: const [
+                          Icon(Icons.home_rounded),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Atur Alamat",
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Colors.black),
-                        ))
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.question_mark),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Pertanyaan Umum",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: Colors.black),
-                        ))
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.exit_to_app,
-                      color: Color(0xFF5C94AF),
+                              color: Colors.black,
+                            ),
+                          )
+                        ],
                       ),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Keluar",
-                          style: TextStyle(
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        AlertDialog alert = AlertDialog(
+                          title: const Text(
+                            "Segera Hadir",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                            ),
+                          ),
+                          content: const Text(
+                            "Fitur ini masih dalam tahap perencanaan",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Color(0xff757575)),
+                          ),
+                          actions: [
+                            Center(
+                              child: OutlinedButton(
+                                child: const Text(
+                                  "OK",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xff6FB2D2)),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(),
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(
+                                    width: 2.0,
+                                    color: Color(0xff6FB2D2),
+                                  ),
+                                  shape: const StadiumBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(Icons.question_mark),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Pertanyaan Umum",
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
-                              color: Color(0xFF5C94AF)),
-                        ))
+                              color: Colors.black,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        AlertDialog alert = AlertDialog(
+                          title: const Text(
+                            "Konfirmasi",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                            ),
+                          ),
+                          content: const Text(
+                            "Apakah anda yakin ingin keluar dari akun ini",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Color(0xff757575)),
+                          ),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                OutlinedButton(
+                                  child: const Text(
+                                    "Tidak",
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xff6FB2D2)),
+                                  ),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                      width: 2.0,
+                                      color: Color(0xff6FB2D2),
+                                    ),
+                                    shape: const StadiumBorder(),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                OutlinedButton(
+                                  child: const Text(
+                                    "Iya",
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xff6FB2D2)),
+                                  ),
+                                  onPressed: () async {
+                                    await AuthService().signOut();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Login()));
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                      width: 2.0,
+                                      color: Color(0xff6FB2D2),
+                                    ),
+                                    shape: const StadiumBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.exit_to_app,
+                            color: Color(0xff5C94AF),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Keluar",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xff5C94AF),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 )
               ],

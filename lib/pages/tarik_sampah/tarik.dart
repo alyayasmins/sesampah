@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'package:sesampah/pages/tarik_sampah/konfirmasi.dart';
+import 'package:sesampah/pages/tarik_sampah/riwayat.dart';
 
 class TarikSampah extends StatefulWidget {
   const TarikSampah({Key? key}) : super(key: key);
@@ -26,7 +27,12 @@ class _TarikSampahState extends State<TarikSampah> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const RiwayatPenarikan()));
+              },
               icon: const Icon(
                 Icons.history,
                 color: Colors.black,

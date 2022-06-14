@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sesampah/pages/tarik_sampah/tarik.dart';
 
-class Pesanan extends StatefulWidget {
-  const Pesanan({Key? key}) : super(key: key);
+class RiwayatPenarikan extends StatefulWidget {
+  const RiwayatPenarikan({Key? key}) : super(key: key);
 
   @override
-  State<Pesanan> createState() => _PesananState();
+  State<RiwayatPenarikan> createState() => _RiwayatPenarikanState();
 }
 
-class _PesananState extends State<Pesanan> {
+class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +16,7 @@ class _PesananState extends State<Pesanan> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          "Status Sampah",
+          "Riwayat Penarikan",
           style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 25,
@@ -23,9 +24,17 @@ class _PesananState extends State<Pesanan> {
               color: Colors.black),
         ),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const TarikSampah()));
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.black,
+        ),
       ),
       body: DefaultTabController(
-        length: 4,
+        length: 3,
         child: Column(
           children: <Widget>[
             Container(
@@ -44,17 +53,7 @@ class _PesananState extends State<Pesanan> {
                 ),
                 Tab(
                   child: Text(
-                    "Dibawa",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    "Ditimbang",
+                    "Diproses",
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Poppins',
@@ -76,7 +75,6 @@ class _PesananState extends State<Pesanan> {
             ),
             const Expanded(
               child: TabBarView(children: [
-                Text(""),
                 Text(""),
                 Text(""),
                 Text(""),
