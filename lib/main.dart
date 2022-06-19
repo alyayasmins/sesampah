@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sesampah/login/authentication.dart';
 import 'package:sesampah/login/introLogin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:sesampah/operator/homeOperator.dart';
 import 'package:sesampah/pages/home_page/bottom_bar.dart';
 
 void main() async {
@@ -18,8 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: //FirstPage()
-      StreamBuilder(
+      home: //HomeOperator()
+          //FirstPage()
+          StreamBuilder(
         stream: AuthService().firebaseAuth.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {

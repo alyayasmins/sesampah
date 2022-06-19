@@ -1,10 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:sesampah/login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+  // static Future<FirebaseUser> signInAnonymous() async {
+  //   try {
+  //     AuthResult result = await firebaseAuth.signInAnonymously();
+  //     FirebaseUser firebaseUser = result.user;
+
+  //     return firebaseUser;
+  //   } catch (e) {
+  //     print(e.toString());
+
+  //     return null;
+  //   }
+  // }
+
   Future<User?> signUp(
       String email, String password, BuildContext context) async {
     try {
@@ -38,6 +51,8 @@ class AuthService {
   }
 
   Future signOut() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    shared.clear();
     await firebaseAuth.signOut();
   }
 }

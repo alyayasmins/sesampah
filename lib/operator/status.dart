@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sesampah/operator/homeOperator.dart';
 
-class RiwayatPenarikan extends StatefulWidget {
-  const RiwayatPenarikan({Key? key}) : super(key: key);
+class StatusSampah extends StatefulWidget {
+  const StatusSampah({Key? key}) : super(key: key);
 
   @override
-  State<RiwayatPenarikan> createState() => _RiwayatPenarikanState();
+  State<StatusSampah> createState() => _StatusSampahState();
 }
 
-class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
+class _StatusSampahState extends State<StatusSampah> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +16,7 @@ class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          "Riwayat Penarikan",
+          "Status Sampah",
           style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 25,
@@ -25,14 +26,15 @@ class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomeOperator()));
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
         ),
       ),
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Column(
           children: <Widget>[
             Container(
@@ -51,7 +53,17 @@ class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
                 ),
                 Tab(
                   child: Text(
-                    "Diproses",
+                    "Dibawa",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    "Ditimbang",
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Poppins',
@@ -73,6 +85,7 @@ class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
             ),
             const Expanded(
               child: TabBarView(children: [
+                Text(""),
                 Text(""),
                 Text(""),
                 Text(""),

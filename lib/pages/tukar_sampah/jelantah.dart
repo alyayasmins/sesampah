@@ -42,6 +42,7 @@ class _SubListJelantahState extends State<SubListJelantah> {
               onPressed: _value == true
                   ? () {
                       showModalBottomSheet(
+                          backgroundColor: const Color(0xff6FB2D2),
                           context: context,
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
@@ -49,44 +50,66 @@ class _SubListJelantahState extends State<SubListJelantah> {
                             topRight: Radius.circular(25.0),
                           )),
                           builder: (context) {
-                            return Container(
-                                margin: const EdgeInsets.all(25),
-                                child: Column(children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Pilih Pengantaran Sampah",
-                                        style: TextStyle(
+                            return StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return Container(
+                                  margin: const EdgeInsets.all(30),
+                                  child: Column(children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Pilih Pengantaran Sampah",
+                                          style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      RadioListTile(
-                                        value: 0,
-                                        groupValue: _radioGroupA,
-                                        onChanged: _handleRadioValueChanged,
-                                        title: const Text("Menjemput"),
-                                        subtitle: const Text(
-                                            "Petugas akan menjemput sampahmu "),
-                                        selected: _radioGroupA == 0,
-                                      ),
-                                      RadioListTile(
-                                        value: 1,
-                                        groupValue: _radioGroupA,
-                                        onChanged: _handleRadioValueChanged,
-                                        title: const Text("Mengantarkan"),
-                                        subtitle: const Text(
-                                            "Antar langsung sampahmu"),
-                                        selected: _radioGroupA == 1,
-                                      )
-                                    ],
-                                  ),
-                                ]));
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffF0F4FD),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        RadioListTile(
+                                          value: 0,
+                                          groupValue: _radioGroupA,
+                                          onChanged: (_) {
+                                            setState(() {
+                                              _radioGroupA = 0;
+                                            });
+                                          },
+                                          title: const Text(
+                                            "Menjemput",
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          subtitle: const Text(
+                                              "Petugas akan menjemput sampahmu "),
+                                          selected: _radioGroupA == 0,
+                                        ),
+                                        RadioListTile(
+                                          value: 1,
+                                          groupValue: _radioGroupA,
+                                          onChanged: (_) {
+                                            setState(() {
+                                              _radioGroupA = 1;
+                                            });
+                                          },
+                                          title: const Text(
+                                            "Mengantarkan",
+                                          ),
+                                          subtitle: const Text(
+                                              "Antar langsung sampahmu"),
+                                          selected: _radioGroupA == 1,
+                                        )
+                                      ],
+                                    ),
+                                  ]));
+                            });
                           });
                     }
                   : null,

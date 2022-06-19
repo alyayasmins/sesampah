@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sesampah/login/authentication.dart';
 import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'package:sesampah/login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Masuk extends StatefulWidget {
   const Masuk({
@@ -192,7 +193,7 @@ class _MasukState extends State<Masuk> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text("Semua kolom wajib di isi!"),
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.grey,
                             ),
                           );
                         } else {
@@ -202,11 +203,16 @@ class _MasukState extends State<Masuk> {
                               context);
                           if (result != null) {
                             print("Berhasil");
+                            SharedPreferences shared =
+                                await SharedPreferences.getInstance();
+                            shared.setString('uid', result.uid);
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const BattomBar()),
                                 (route) => false);
+                          } else {
+                            print('login gagal');
                           }
                         }
                         setState(() {
@@ -219,7 +225,7 @@ class _MasukState extends State<Masuk> {
                             borderRadius: BorderRadius.circular(10)),
                       ),
                       child: const Text(
-                        "Daftar",
+                        "Masuk",
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,

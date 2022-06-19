@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/login/login.dart';
-import 'package:sesampah/login/masuk.dart';
 import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Daftar extends StatefulWidget {
   const Daftar({
@@ -23,11 +24,6 @@ class _DaftarState extends State<Daftar> {
   TextEditingController addressController = TextEditingController();
 
   bool loading = false;
-
-  // String? fullName;
-  // String? email;
-  // String? password;
-  // String? address;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -265,19 +261,40 @@ class _DaftarState extends State<Daftar> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text("Semua kolom wajib di isi!"),
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.grey,
                             ),
                           );
                         } else {
                           User? result = await AuthService().signUp(
-                              emailController.text, passwordController.text, context);
+                              emailController.text,
+                              passwordController.text,
+                              context);
+
                           if (result != null) {
                             print("Berhasil");
+                            // TODO: simpan data user baru ke koleksi user dengan dokumen id ambil dari result.uid
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(result.uid)
+                                .set({
+                              'fullName': fullNameController.text,
+                              'email': emailController.text,
+                              'password': passwordController.text,
+                              'address': addressController.text,
+                              'balance': 0,
+                            });
+
+                            SharedPreferences shared =
+                                await SharedPreferences.getInstance();
+                            shared.setString('uid', result.uid);
+                            
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const BattomBar()),
                                 (route) => false);
+                          } else {
+                            print('email sudah terdaftar');
                           }
                         }
                         setState(() {
@@ -290,12 +307,12 @@ class _DaftarState extends State<Daftar> {
                             borderRadius: BorderRadius.circular(10)),
                       ),
                       child: const Text(
-                      "Daftar",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
-                    ),
+                        "Daftar",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
           ],

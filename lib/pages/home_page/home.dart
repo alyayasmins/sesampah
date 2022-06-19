@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/location/lokasi.dart';
 import 'package:sesampah/pages/tarik_sampah/tarik.dart';
 import 'package:sesampah/pages/tukar_sampah/tukar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageHome extends StatefulWidget {
   const PageHome({Key? key, required this.title}) : super(key: key);
@@ -12,6 +14,30 @@ class PageHome extends StatefulWidget {
 }
 
 class _PageHomeState extends State<PageHome> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    String? uid = shared.getString('uid');
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      fullName = value.get('fullName');
+      balance = value.get('balance').toString();
+
+      setState(() {});
+    });
+  }
+
+  String? fullName;
+  String? balance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,20 +52,20 @@ class _PageHomeState extends State<PageHome> {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        "Hai, Alya",
-                        style: TextStyle(
+                        "Hai, $fullName",
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text(
+                      const Text(
                         "Selamat datang di Sesampah",
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -113,11 +139,11 @@ class _PageHomeState extends State<PageHome> {
                 color: const Color(0xFF6FB2D2),
               ),
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
+                  const Text(
                     "Saldo anda",
                     style: TextStyle(
                         fontFamily: 'Poppins',
@@ -125,12 +151,12 @@ class _PageHomeState extends State<PageHome> {
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "Rp.100.000",
-                    style: TextStyle(
+                    "$balance",
+                    style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
@@ -206,7 +232,7 @@ class _PageHomeState extends State<PageHome> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const TarikSampah()));
+                                    builder: (context) => TarikSampah(balance: int.parse(balance!))));
                           },
                           child: Container(
                             decoration: const BoxDecoration(
@@ -252,7 +278,8 @@ class _PageHomeState extends State<PageHome> {
                           child: Container(
                             decoration: const BoxDecoration(
                               image: DecorationImage(
-                                  image: AssetImage('assets/image/location.png')),
+                                  image:
+                                      AssetImage('assets/image/location.png')),
                             ),
                           ),
                         ),

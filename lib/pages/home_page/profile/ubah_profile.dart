@@ -1,93 +1,236 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:sesampah/pages/home_page/bottom_bar.dart';
+import 'package:sesampah/pages/home_page/profile/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// class EditProfileView extends StatefulWidget {
-//   const EditProfileView({Key? key}) : super(key: key);
+class UbahProfile extends StatefulWidget {
+  final DocumentSnapshot doc;
+  const UbahProfile({Key? key, required this.doc}) : super(key: key);
 
-//   @override
-//   _EditProfileViewState createState() => _EditProfileViewState();
-// }
+  @override
+  State<UbahProfile> createState() => _UbahProfileState();
+}
 
-// class _EditProfileViewState extends State<EditProfileView> {
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _UbahProfileState extends State<UbahProfile> {
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  @override
+  void initState() {
+    fullNameController =
+        TextEditingController(text: widget.doc.get('fullName'));
+    emailController = TextEditingController(text: widget.doc.get('email'));
+    passwordController =
+        TextEditingController(text: widget.doc.get('password'));
+    // TODO: implement initState
+    super.initState();
+  }
 
-//   void _handleSubmitted() {
-//     final FormState? form = _formKey.currentState;
-//     if (!form!.validate()) {
-//       _autovalidate = true;
-//       showInSnackBar('Please fix the errors in red before submitting.');
-//     } else {
-//       showInSnackBar('snackchat');
-//       User.instance.first_name = firstName;
-//       User.instance.last_name = lastName;
+  String? fullName;
+  String? email;
+  String? password;
+  bool _obscureText = true;
+  bool _isHidePassword = true;
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isHidePassword = !_isHidePassword;
+    });
+  }
 
-//       User.instance.save().then((result) {
-//         print("Saving done: ${result}.");
-//       });
-//     }
-//   }
-
-//   final TextEditingController _firstNameController = TextEditingController();
-//   String firstName = User.instance.first_name;
-//   final TextEditingController _lastNameController = TextEditingController();
-//   String lastName = User.instance.last_name;
-
-//   @override
-//   void initState() {
-//     _firstNameController.text = firstName;
-//     _lastNameController.text = lastName;
-//     return super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final ThemeData themeData = Theme.of(context);
-//     final DateTime today = DateTime.now();
-
-//     return Scaffold(
-//         appBar: AppBar(title: const Text('Edit Profile'), actions: <Widget>[
-//           Container(
-//               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 5.0, 10.0),
-//               child: MaterialButton(
-//                 color: themeData.primaryColor,
-//                 textColor: themeData.secondaryHeaderColor,
-//                 child: const Text('Save'),
-//                 onPressed: () {
-//                   _handleSubmitted();
-//                   Navigator.pop(context);
-//                 },
-//               ))
-//         ]),
-//         body: Form(
-//             key: _formKey,
-//             autovalidate: _autovalidate,
-//             onWillPop: _warnUserAboutInvalidData,
-//             child: ListView(
-//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//               children: <Widget>[
-//                 Container(
-//                   child: TextField(
-//                     decoration: const InputDecoration(
-//                         labelText: "First Name",
-//                         hintText: "What do people call you?"),
-//                     autocorrect: false,
-//                     controller: _firstNameController,
-//                     onChanged: (String value) {
-//                       firstName = value;
-//                     },
-//                   ),
-//                 ),
-//                 Container(
-//                   child: TextField(
-//                     decoration: const InputDecoration(labelText: "Last Name"),
-//                     autocorrect: false,
-//                     controller: _lastNameController,
-//                     onChanged: (String value) {
-//                       lastName = value;
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             )));
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          "Ubah Profil",
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.black,
+        ),
+      ),
+      body: SizedBox(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 30,
+              child: Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Form(
+                  child: Column(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 20),
+                            child: const Text(
+                              "Nama Pengguna",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 16,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Form(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: TextFormField(
+                                        controller: fullNameController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                      ))
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 20),
+                            child: const Text(
+                              "Email",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 16,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Form(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: TextFormField(
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        controller: emailController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                      ))
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 20),
+                            child: const Text(
+                              "Kata Sandi",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 16,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Form(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: TextFormField(
+                                        obscureText: _isHidePassword,
+                                        autofocus: false,
+                                        keyboardType: TextInputType.text,
+                                        controller: passwordController,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            suffixIcon: GestureDetector(
+                                              onTap: () {
+                                                _togglePasswordVisibility();
+                                              },
+                                              child: Icon(
+                                                _isHidePassword
+                                                    ? Icons.visibility_off
+                                                    : Icons.visibility,
+                                                color: _isHidePassword
+                                                    ? Colors.grey
+                                                    : Colors.blue,
+                                              ),
+                                            )),
+                                      ))
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Container(
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () {
+                    widget.doc.reference.update({
+                      'fullName': fullNameController.text,
+                      'email': emailController.text,
+                      'password': passwordController.text
+                    });
+                    Navigator.pop(context, true);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF375969),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: const Text(
+                    "Simpan",
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

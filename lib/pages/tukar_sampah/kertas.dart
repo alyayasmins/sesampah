@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sesampah/pages/tukar_sampah/tukar.dart';
 
 class SubListKertas extends StatefulWidget {
   const SubListKertas({Key? key}) : super(key: key);
@@ -78,46 +79,71 @@ class _SubListKertasState extends State<SubListKertas> {
                             topRight: Radius.circular(25.0),
                           )),
                           builder: (context) {
-                            return Container(
-                                margin: const EdgeInsets.all(30),
-                                child: Column(children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "Pilih Pengantaran Sampah",
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xffF0F4FD),
+                            return StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return Container(
+                                  margin: const EdgeInsets.all(30),
+                                  child: Column(children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Pilih Pengantaran Sampah",
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffF0F4FD),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      RadioListTile(
-                                        value: 0,
-                                        groupValue: _radioGroupA,
-                                        onChanged: _handleRadioValueChanged,
-                                        title: const Text("Menjemput"),
-                                        subtitle: const Text(
-                                            "Petugas akan menjemput sampahmu "),
-                                        selected: _radioGroupA == 0,
-                                      ),
-                                      RadioListTile(
-                                        value: 1,
-                                        groupValue: _radioGroupA,
-                                        onChanged: _handleRadioValueChanged,
-                                        title: const Text("Mengantarkan"),
-                                        subtitle: const Text(
-                                            "Antar langsung sampahmu"),
-                                        selected: _radioGroupA == 1,
-                                      )
-                                    ],
-                                  ),
-                                ]));
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        RadioListTile(
+                                          value: 0,
+                                          groupValue: _radioGroupA,
+                                          onChanged: (_) {
+                                            setState(() {
+                                              _radioGroupA = 0;
+                                            });
+                                          },
+                                          title: const Text(
+                                            "Menjemput",
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          subtitle: const Text(
+                                              "Petugas akan menjemput sampahmu "),
+                                          selected: _radioGroupA == 0,
+                                        ),
+                                        RadioListTile(
+                                          value: 1,
+                                          groupValue: _radioGroupA,
+                                          onChanged: (_) {
+                                            setState(() {
+                                              _radioGroupA = 1;
+                                            });
+                                          },
+                                          title: const Text(
+                                            "Mengantarkan",
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          subtitle: const Text(
+                                              "Antar langsung sampahmu"),
+                                          selected: _radioGroupA == 1,
+                                        )
+                                      ],
+                                    ),
+                                  ]));
+                            });
                           });
                     }
                   : null,
