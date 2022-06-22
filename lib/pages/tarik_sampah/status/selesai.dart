@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sesampah/pages/Pesanan/status/Detail/detailSelesai.dart';
+import 'package:sesampah/pages/tarik_sampah/status/Lihat%20Detail/detailSelesai.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Selesai extends StatefulWidget {
   const Selesai({Key? key}) : super(key: key);
@@ -8,86 +12,141 @@ class Selesai extends StatefulWidget {
 }
 
 class _SelesaiState extends State<Selesai> {
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    uid = shared.getString('uid');
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      fullName = value.get('fullName');
+      setState(() {});
+    });
+  }
+
+  String? uid;
+  String? fullName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          Container(
-            margin: EdgeInsets.all(20),
-            child: Column(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('balanceWithdraw')
+            .where('status', isEqualTo: 'Selesai')
+            .where('userId', isEqualTo: uid)
+            .snapshots(),
+        builder: (_, snapshots) {
+          if (snapshots.hasData) {
+            return ListView(
               children: [
-                Container(
-                  height: 20,
-                  width: 75,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFF6FB2D2),
-                  ),
-                  child: Text(
-                    "data",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Nama Pengguna",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      "data",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Nominal Penarikan",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      "data",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Lihat Detail",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 18,
-                          color: Color(0xFF9E9E9E),
+                ...snapshots.data!.docs.map(
+                  (e) => Container(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 30,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Color(0xFF6FB2D2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  e.get('status'),
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    )
-                  ],
-                )
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Nama Pengguna",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              '$fullName',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Nominal Penarikan",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              e.get('nominal'),
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailTarikSelesai()));
+                              },
+                              child: Text(
+                                "Lihat Detail",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+                                  color: Color(0xFF9E9E9E),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
-            ),
-          )
-        ],
+            );
+          } else {
+            return Text("Loading");
+          }
+        },
       ),
     );
   }

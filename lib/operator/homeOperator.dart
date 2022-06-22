@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sesampah/login/authentication.dart';
 import 'package:sesampah/login/login.dart';
-import 'package:sesampah/operator/lihatSaldo.dart';
-import 'package:sesampah/operator/penarikan.dart';
-import 'package:sesampah/operator/status.dart';
+import 'package:sesampah/operator/Status%20Sampah/status.dart';
+import 'package:sesampah/operator/saldo/lihatSaldo.dart';
+import 'package:sesampah/operator/penarikan/penarikan.dart';
 
 class HomeOperator extends StatefulWidget {
   const HomeOperator({Key? key}) : super(key: key);
@@ -194,7 +193,7 @@ class _HomeOperatorState extends State<HomeOperator> {
                               ),
                               const SizedBox(height: 10),
                               const Text(
-                                "operator12345@gmail.com",
+                                "operator123@gmail.com",
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Color(0XFF375969),

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sesampah/operator/Status%20Sampah/status/statusDibawa.dart';
+import 'package:sesampah/operator/Status%20Sampah/status/statusDiterima.dart';
+import 'package:sesampah/operator/Status%20Sampah/status/statusDitimbang.dart';
+import 'package:sesampah/operator/Status%20Sampah/status/statusSelesai.dart';
 import 'package:sesampah/operator/homeOperator.dart';
 
 class StatusSampah extends StatefulWidget {
@@ -26,8 +30,7 @@ class _StatusSampahState extends State<StatusSampah> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeOperator()));
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
@@ -42,7 +45,7 @@ class _StatusSampahState extends State<StatusSampah> {
               child: const TabBar(tabs: [
                 Tab(
                   child: Text(
-                    "Belum\nDiproses",
+                    "Diterima",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -85,10 +88,10 @@ class _StatusSampahState extends State<StatusSampah> {
             ),
             const Expanded(
               child: TabBarView(children: [
-                Text(""),
-                Text(""),
-                Text(""),
-                Text(""),
+                StatusDiterima(),
+                StatusDibawa(),
+                StatusDitimbang(),
+                StatusSelesai(),
               ]),
             )
           ],

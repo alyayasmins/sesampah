@@ -2,17 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Lihat Detail/detailDiproses.dart';
-
-class Diproses extends StatefulWidget {
-  final String nominal;
-  const Diproses({Key? key, required this.nominal}) : super(key: key);
+class StatusDiterima extends StatefulWidget {
+  const StatusDiterima({Key? key}) : super(key: key);
 
   @override
-  State<Diproses> createState() => _DiprosesState();
+  State<StatusDiterima> createState() => _StatusDiterimaState();
 }
 
-class _DiprosesState extends State<Diproses> {
+class _StatusDiterimaState extends State<StatusDiterima> {
   void initState() {
     // TODO: implement initState
     userData();
@@ -27,21 +24,18 @@ class _DiprosesState extends State<Diproses> {
         .doc(uid)
         .get()
         .then((value) {
-      fullName = value.get('fullName');
       setState(() {});
     });
   }
 
   String? uid;
-  String? fullName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('balanceWithdraw')
-            .where('status', isEqualTo: 'Diproses')
-            .where('userId', isEqualTo: uid)
+            .where('status', isEqualTo: 'Diterima')
             .snapshots(),
         builder: (_, snapshots) {
           if (snapshots.hasData) {
@@ -57,7 +51,7 @@ class _DiprosesState extends State<Diproses> {
                           children: [
                             Container(
                               height: 30,
-                              width: 100,
+                              width: 90,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Color(0xFF6FB2D2),
@@ -89,7 +83,7 @@ class _DiprosesState extends State<Diproses> {
                               ),
                             ),
                             Text(
-                              '$fullName',
+                              "data",
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -101,14 +95,14 @@ class _DiprosesState extends State<Diproses> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Nominal Penarikan",
+                              "Kertas Arsip",
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
                               ),
                             ),
                             Text(
-                              e.get('nominal'),
+                              "data",
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -116,49 +110,56 @@ class _DiprosesState extends State<Diproses> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => DetailDiproses()));
-                              },
-                              child: Text(
-                                "Lihat Detail",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                  color: Color(0xFF9E9E9E),
+                            Row(
+                              children: [
+                                Icon(Icons.location_on),
+                                Text(
+                                  "Lokasi Pengantaran",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Color(0xFF375969),
+                                  ),
                                 ),
+                              ],
+                            ),
+                            Text(
+                              "Sukajaya, Kec.Sumedang Selatan,Jawa Barat",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
                               ),
                             )
                           ],
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.end,
-                        //   children: [
-                        //     TextButton(
-                        //       onPressed: () {
-                        //         Navigator.push(
-                        //             context,
-                        //             MaterialPageRoute(
-                        //                 builder: (context) =>
-                        //                     DetailBelumTarik(nominal: widget.nominal,)));
-                        //       },
-                        //       child: Text(
-                        //         "Lihat Detail",
-                        //         style: TextStyle(
-                        //           fontFamily: 'Poppins',
-                        //           fontSize: 18,
-                        //           color: Color(0xFF9E9E9E),
-                        //         ),
-                        //       ),
-                        //     )
-                        //   ],
-                        // )
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: Text(
+                                "Terima",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF6FB2D2)),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -166,7 +167,7 @@ class _DiprosesState extends State<Diproses> {
               ],
             );
           } else {
-            return Text('Loading');
+            return Text("Loading");
           }
         },
       ),

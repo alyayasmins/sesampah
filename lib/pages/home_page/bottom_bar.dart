@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:sesampah/pages/home_page/home.dart';
-import 'package:sesampah/pages/home_page/pesanan.dart';
+import 'package:sesampah/pages/Pesanan/pesanan.dart';
 import 'package:sesampah/pages/home_page/profile/profile.dart';
 
 class BattomBar extends StatefulWidget {

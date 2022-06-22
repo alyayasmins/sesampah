@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sesampah/operator/homeOperator.dart';
+import 'package:sesampah/pages/Pesanan/status/belumDiproses.dart';
 
-class LihatSaldo extends StatefulWidget {
-  const LihatSaldo({Key? key}) : super(key: key);
+class DetailPesananBelum extends StatefulWidget {
+  const DetailPesananBelum({Key? key}) : super(key: key);
 
   @override
-  State<LihatSaldo> createState() => _LihatSaldoState();
+  State<DetailPesananBelum> createState() => _DetailPesananBelumState();
 }
 
-class _LihatSaldoState extends State<LihatSaldo> {
+class _DetailPesananBelumState extends State<DetailPesananBelum> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class _LihatSaldoState extends State<LihatSaldo> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          "Saldo Pengguna",
+          "Detail Status",
           style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 25,
@@ -27,7 +27,7 @@ class _LihatSaldoState extends State<LihatSaldo> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeOperator()));
+                MaterialPageRoute(builder: (context) => const PesananBelum()));
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,

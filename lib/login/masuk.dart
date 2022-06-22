@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/login/authentication.dart';
+import 'package:sesampah/operator/homeOperator.dart';
 import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'package:sesampah/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -196,6 +197,24 @@ class _MasukState extends State<Masuk> {
                               backgroundColor: Colors.grey,
                             ),
                           );
+                        } else if (emailController.text ==
+                                "operator123@gmail.com" ||
+                            passController == "opt123") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeOperator(),
+                            ),
+                          );
+                          if (emailController.text != "operator123@gmail.com" ||
+                              passController != "opt123") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Email atau password salah"),
+                                backgroundColor: Colors.grey,
+                              ),
+                            );
+                          }
                         } else {
                           User? result = await AuthService().Login(
                               emailController.text,

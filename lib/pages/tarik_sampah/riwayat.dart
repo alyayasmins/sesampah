@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sesampah/pages/tarik_sampah/status/belum.dart';
+import 'package:sesampah/pages/tarik_sampah/status/diproses.dart';
+import 'package:sesampah/pages/tarik_sampah/status/selesai.dart';
+import 'package:sesampah/pages/tarik_sampah/tarik.dart';
 
 class RiwayatPenarikan extends StatefulWidget {
-  const RiwayatPenarikan({Key? key}) : super(key: key);
+  final String Nominal;
+  const RiwayatPenarikan({Key? key, required this.Nominal}) : super(key: key);
 
   @override
   State<RiwayatPenarikan> createState() => _RiwayatPenarikanState();
 }
 
 class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
+  int? balance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +31,10 @@ class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TarikSampah(balance: 0)));
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
@@ -71,13 +80,19 @@ class _RiwayatPenarikanState extends State<RiwayatPenarikan> {
                 ),
               ]),
             ),
-            const Expanded(
-              child: TabBarView(children: [
-                Text(""),
-                Text(""),
-                Text(""),
-              ]),
-            )
+            Expanded(
+              child: TabBarView(
+                children: [
+                  BelumDiproses(
+                    nominal: widget.Nominal,
+                  ),
+                  Diproses(
+                    nominal: widget.Nominal,
+                  ),
+                  Selesai(),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/tarik_sampah/riwayat.dart';
-import 'package:sesampah/pages/tarik_sampah/tarik.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
@@ -226,7 +225,7 @@ class _KonfirmasiState extends State<Konfirmasi> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const RiwayatPenarikan()));
+                                        RiwayatPenarikan(Nominal: widget.nominal)));
                           },
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(

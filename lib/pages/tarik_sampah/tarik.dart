@@ -60,7 +60,7 @@ class _TarikSampahState extends State<TarikSampah> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const RiwayatPenarikan()));
+                        builder: (context) =>  RiwayatPenarikan(Nominal: '',)));
               },
               icon: const Icon(
                 Icons.history,
@@ -188,42 +188,4 @@ class _TarikSampahState extends State<TarikSampah> {
       ),
     );
   }
-
-  // tambahData() {
-  //   StreamBuilder(
-  //       stream: FirebaseFirestore.instance
-  //           .collection('balanceWithdraw')
-  //           .snapshots(),
-  //       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-  //         if (streamSnapshot.hasData) {
-  //           return ListView.builder(
-  //             itemCount: streamSnapshot.data!.docs.length,
-  //             itemBuilder: (context, index) {
-  //               final DocumentSnapshot documentSnapshot =
-  //                   streamSnapshot.data!.docs[index];
-  //               return Card(
-  //                 margin: const EdgeInsets.all(10),
-  //                 child: ListTile(
-  //                   title: Text(documentSnapshot['status']),
-  //                   subtitle: Text(documentSnapshot['nominal'].toString()),
-  //                   trailing: SizedBox(
-  //                     child: ElevatedButton(
-  //                         onPressed: () {
-  //                           Navigator.push(
-  //                               context,
-  //                               MaterialPageRoute(
-  //                                   builder: (context) => Konfirmasi(
-  //                                       nominal : 'nominal')));
-  //                         },
-  //                         child: const Text("data")),
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //           );
-  //         } else {
-  //           return Text("data");
-  //         }
-  //       });
-  // }
 }

@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/home_page/bottom_bar.dart';
-import 'package:sesampah/pages/home_page/profile/profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UbahProfile extends StatefulWidget {
   final DocumentSnapshot doc;

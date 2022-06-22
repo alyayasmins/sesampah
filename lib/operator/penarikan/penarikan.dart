@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sesampah/operator/homeOperator.dart';
+import 'package:sesampah/operator/penarikan/status/Diproses.dart';
+import 'package:sesampah/operator/penarikan/status/Selesai.dart';
+import 'package:sesampah/operator/penarikan/status/diterima.dart';
 
 class Penarikan extends StatefulWidget {
   const Penarikan({Key? key}) : super(key: key);
@@ -26,8 +29,7 @@ class _PenarikanState extends State<Penarikan> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeOperator()));
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
@@ -42,7 +44,7 @@ class _PenarikanState extends State<Penarikan> {
               child: const TabBar(tabs: [
                 Tab(
                   child: Text(
-                    "Belum\nDiproses",
+                    "Diterima",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -73,11 +75,11 @@ class _PenarikanState extends State<Penarikan> {
                 ),
               ]),
             ),
-            const Expanded(
+            Expanded(
               child: TabBarView(children: [
-                Text(""),
-                Text(""),
-                Text(""),
+                Diterima(),
+                PenarikanDiproses(),
+                PenarikanSelesai(),
               ]),
             )
           ],

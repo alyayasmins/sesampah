@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Lihat Detail/detailDiproses.dart';
-
-class Diproses extends StatefulWidget {
-  final String nominal;
-  const Diproses({Key? key, required this.nominal}) : super(key: key);
+class PenarikanSelesai extends StatefulWidget {
+  const PenarikanSelesai({Key? key}) : super(key: key);
 
   @override
-  State<Diproses> createState() => _DiprosesState();
+  State<PenarikanSelesai> createState() => _PenarikanSelesaiState();
 }
 
-class _DiprosesState extends State<Diproses> {
+class _PenarikanSelesaiState extends State<PenarikanSelesai> {
+  static var today = new DateTime.now();
+  var formatedTanggal = new DateFormat.yMMMd().format(today);
   void initState() {
     // TODO: implement initState
     userData();
@@ -36,18 +36,17 @@ class _DiprosesState extends State<Diproses> {
   String? fullName;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('balanceWithdraw')
-            .where('status', isEqualTo: 'Diproses')
-            .where('userId', isEqualTo: uid)
-            .snapshots(),
-        builder: (_, snapshots) {
-          if (snapshots.hasData) {
-            return ListView(
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('balanceWithdraw')
+          .where('status', isEqualTo: 'Selesai')
+          .snapshots(),
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+            body: ListView(
               children: [
-                ...snapshots.data!.docs.map(
+                ...snapshot.data!.docs.map(
                   (e) => Container(
                     margin: EdgeInsets.all(20),
                     child: Column(
@@ -57,7 +56,7 @@ class _DiprosesState extends State<Diproses> {
                           children: [
                             Container(
                               height: 30,
-                              width: 100,
+                              width: 90,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Color(0xFF6FB2D2),
@@ -77,6 +76,25 @@ class _DiprosesState extends State<Diproses> {
                         ),
                         SizedBox(
                           height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Tanggal Penarikan",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              formatedTanggal.toString(),
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,35 +137,31 @@ class _DiprosesState extends State<Diproses> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            TextButton(
+                            ElevatedButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => DetailDiproses()));
+                                FirebaseFirestore.instance
+                                    .collection('balanceWithdraw')
+                                    .doc(e.id)
+                                    .update({'status': "Selesai"});
                               },
                               child: Text(
-                                "Lihat Detail",
+                                "Terima",
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 18,
-                                  color: Color(0xFF9E9E9E),
+                                  color: Colors.white,
                                 ),
                               ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF6FB2D2)),
                             )
                           ],
-                        ),
+                        )
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.end,
                         //   children: [
                         //     TextButton(
-                        //       onPressed: () {
-                        //         Navigator.push(
-                        //             context,
-                        //             MaterialPageRoute(
-                        //                 builder: (context) =>
-                        //                     DetailBelumTarik(nominal: widget.nominal,)));
-                        //       },
+                        //       onPressed: () {},
                         //       child: Text(
                         //         "Lihat Detail",
                         //         style: TextStyle(
@@ -164,12 +178,11 @@ class _DiprosesState extends State<Diproses> {
                   ),
                 ),
               ],
-            );
-          } else {
-            return Text('Loading');
-          }
-        },
-      ),
+            ),
+          );
+        }
+        return Text("data");
+      },
     );
   }
 }
