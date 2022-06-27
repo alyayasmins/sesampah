@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/Pesanan/status/dibawa.dart';
 
 class DetailDibawa extends StatefulWidget {
-  const DetailDibawa({ Key? key }) : super(key: key);
+  const DetailDibawa({Key? key}) : super(key: key);
 
   @override
   State<DetailDibawa> createState() => _DetailDibawaState();
@@ -26,8 +25,7 @@ class _DetailDibawaState extends State<DetailDibawa> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const PesananDibawa()));
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,

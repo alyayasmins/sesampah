@@ -5,7 +5,8 @@ import 'package:sesampah/pages/tarik_sampah/status/selesai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailTarikSelesai extends StatefulWidget {
-  const DetailTarikSelesai({Key? key}) : super(key: key);
+  final String nominal;
+  const DetailTarikSelesai({Key? key, required this.nominal}) : super(key: key);
 
   @override
   State<DetailTarikSelesai> createState() => _DetailTarikSelesaiState();
@@ -157,7 +158,7 @@ class _DetailTarikSelesaiState extends State<DetailTarikSelesai> {
                     ),
                   ),
                   Text(
-                    '',
+                    widget.nominal,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
@@ -174,10 +175,9 @@ class _DetailTarikSelesaiState extends State<DetailTarikSelesai> {
                   Text(
                     "Bukti",
                     style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold
-                    ),
+                        fontFamily: 'Poppins',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               )

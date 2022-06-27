@@ -35,7 +35,6 @@ class _DetailBelumTarikState extends State<DetailBelumTarik> {
     });
   }
 
-  int? balance;
   String? uid;
   String? fullName;
   @override

@@ -124,7 +124,9 @@ class _DiprosesState extends State<Diproses> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => DetailDiproses()));
+                                        builder: (context) => DetailDiproses(
+                                              nominal: e.get('nominal'),
+                                            )));
                               },
                               child: Text(
                                 "Lihat Detail",

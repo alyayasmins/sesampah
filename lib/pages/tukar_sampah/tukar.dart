@@ -196,26 +196,3 @@ class _TukarSampahState extends State<TukarSampah>
     );
   }
 }
-
-Widget ButtonAppears() {
-  return ElevatedButton(
-    onPressed: () {},
-    child: Row(
-      children: [
-        Expanded(
-          flex: 7,
-          child: Column(
-            children: const [
-              Text("Menjemput"),
-              Text("Petugas akan menjemput sampahmu")
-            ],
-          ),
-        ),
-        const Expanded(
-          flex: 3,
-          child: Icon(Icons.keyboard_arrow_right),
-        ),
-      ],
-    ),
-  );
-}

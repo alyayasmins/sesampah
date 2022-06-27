@@ -54,7 +54,7 @@ class _BattomBarState extends State<BattomBar> {
       case 0:
         return const PageHome(title: "");
       case 1:
-        return const Pesanan();
+        return const Pesanan(address: '');
       case 2:
         return const ProfilePerson();
     }

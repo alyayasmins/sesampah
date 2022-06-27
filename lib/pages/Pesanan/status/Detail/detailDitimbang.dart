@@ -26,10 +26,7 @@ class _DetailDitimbangState extends State<DetailDitimbang> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const PesananDitimbang()));
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,

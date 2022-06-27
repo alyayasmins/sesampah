@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/tukar_sampah/Pengantaran/dropOff.dart';
 import 'package:sesampah/pages/tukar_sampah/Pengantaran/pickUp.dart';
 import 'package:sesampah/pages/tukar_sampah/tukar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubListKertas extends StatefulWidget {
   const SubListKertas({Key? key}) : super(key: key);
@@ -11,6 +13,19 @@ class SubListKertas extends StatefulWidget {
 }
 
 class _SubListKertasState extends State<SubListKertas> {
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    uid = shared.getString('uid');
+    ;
+  }
+
+  String? uid;
   int _counter = 0;
   bool _value = false;
   bool _value2 = false;
@@ -35,11 +50,18 @@ class _SubListKertasState extends State<SubListKertas> {
                 title: const Text("Arsip"),
                 value: _value,
                 onChanged: (value) {
+                  FirebaseFirestore.instance.collection('swapTrashes').add({
+                    'category': 'Kertas',
+                    'subCategory': {'category': ' Arsip', 'price': '750'},
+                    'userId': uid,
+                  });
+
                   setState(
                     () {
                       _value = value!;
                     },
                   );
+                  ;
                 },
               ),
               CheckboxListTile(
@@ -48,6 +70,10 @@ class _SubListKertasState extends State<SubListKertas> {
                 onChanged: (value2) {
                   setState(
                     () {
+                      FirebaseFirestore.instance.collection('swapTrashes').add({
+                        'category': 'Kertas',
+                        'subCategory': {'category': ' Duplex', 'price': '250'}
+                      });
                       _value2 = value2!;
                     },
                   );
@@ -57,6 +83,10 @@ class _SubListKertasState extends State<SubListKertas> {
                 title: const Text("Kardus"),
                 value: _value3,
                 onChanged: (value3) {
+                  FirebaseFirestore.instance.collection('swapTrashes').add({
+                    'category': 'Kertas',
+                    'subCategory': {'category': ' Kardus', 'price': '2000'}
+                  });
                   setState(
                     () {
                       _value3 = value3!;
@@ -196,9 +226,15 @@ class Button extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           if (value == 0) {
+            FirebaseFirestore.instance.collection('swapTrashes').add({
+              'delivery': 'Menjemput',
+            });
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => PickUp()));
           } else {
+            FirebaseFirestore.instance.collection('swapTrashes').add({
+              'delivery': 'Mengantarkan',
+            });
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => DropOff()));
           }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sesampah/operator/penarikan/status/detail/detailSelesai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PenarikanSelesai extends StatefulWidget {
@@ -21,19 +22,20 @@ class _PenarikanSelesaiState extends State<PenarikanSelesai> {
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      fullName = value.get('fullName');
-      setState(() {});
-    });
+    uid = await shared.getString('uid');
+    print(uid);
+    await FirebaseFirestore.instance.collection('users').doc(uid).get().then(
+      (doc) {
+        setState(() {
+          fullName = doc["fullName"];
+        });
+      },
+    );
   }
 
   String? uid;
   String? fullName;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -107,7 +109,7 @@ class _PenarikanSelesaiState extends State<PenarikanSelesai> {
                               ),
                             ),
                             Text(
-                              '$fullName',
+                              fullName.toString(),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -134,45 +136,58 @@ class _PenarikanSelesaiState extends State<PenarikanSelesai> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                FirebaseFirestore.instance
-                                    .collection('balanceWithdraw')
-                                    .doc(e.id)
-                                    .update({'status': "Selesai"});
-                              },
-                              child: Text(
-                                "Terima",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF6FB2D2)),
-                            )
-                          ],
-                        )
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.end,
                         //   children: [
-                        //     TextButton(
-                        //       onPressed: () {},
+                        //     ElevatedButton(
+                        //       onPressed: () {
+                        //         FirebaseFirestore.instance
+                        //             .collection('balanceWithdraw')
+                        //             .doc(e.id)
+                        //             .update({'status': "Selesai"});
+                        //       },
                         //       child: Text(
-                        //         "Lihat Detail",
+                        //         "Terima",
                         //         style: TextStyle(
                         //           fontFamily: 'Poppins',
                         //           fontSize: 18,
-                        //           color: Color(0xFF9E9E9E),
+                        //           color: Colors.white,
                         //         ),
                         //       ),
+                        //       style: ElevatedButton.styleFrom(
+                        //           primary: Color(0xFF6FB2D2)),
                         //     )
                         //   ],
                         // )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailPenarikanSelesai(
+                                      nominal: e.get('nominal'),
+                                      name: e.get('name'),
+                                      status: e.get('status'),
+                                      id: e.id,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Lihat Detail",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+                                  color: Color(0xFF9E9E9E),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),

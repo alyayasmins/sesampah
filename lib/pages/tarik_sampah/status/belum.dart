@@ -125,7 +125,7 @@ class _BelumDiprosesState extends State<BelumDiproses> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => DetailBelumTarik(
-                                              nominal: widget.nominal,
+                                              nominal:e.get('nominal'),
                                             )));
                               },
                               child: Text(

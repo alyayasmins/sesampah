@@ -192,15 +192,6 @@ class _HomeOperatorState extends State<HomeOperator> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
-                                "operator123@gmail.com",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0XFF375969),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
                             ],
                           ),
                         ),

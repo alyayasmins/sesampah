@@ -13,6 +13,7 @@ class Diterima extends StatefulWidget {
 class _DiterimaState extends State<Diterima> {
   static var today = new DateTime.now();
   var formatedTanggal = new DateFormat.yMMMd().format(today);
+
   void initState() {
     // TODO: implement initState
     userData();
@@ -21,21 +22,23 @@ class _DiterimaState extends State<Diterima> {
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      fullName = value.get('fullName');
-      setState(() {});
-    });
+    uid = await shared.getString('uid');
+    print(uid);
+    await FirebaseFirestore.instance.collection('users').doc(uid).get().then(
+      (doc) {
+        setState(() {
+          fullName = doc["fullName"];
+        });
+      },
+    );
   }
 
   String? uid;
   String? fullName;
+
   @override
   Widget build(BuildContext context) {
+    print("bod");
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('balanceWithdraw')
@@ -107,7 +110,7 @@ class _DiterimaState extends State<Diterima> {
                                 ),
                               ),
                               Text(
-                                '$fullName',
+                                fullName.toString(),
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 18,
@@ -145,7 +148,7 @@ class _DiterimaState extends State<Diterima> {
                                   FirebaseFirestore.instance
                                       .collection('balanceWithdraw')
                                       .doc(e.id)
-                                      .update({'status': "Diproses"});
+                                      .update({'status': 'Diproses'});
                                 },
                                 child: Text(
                                   "Terima",

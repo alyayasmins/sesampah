@@ -3,7 +3,6 @@ import 'package:sesampah/operator/Status%20Sampah/status/statusDibawa.dart';
 import 'package:sesampah/operator/Status%20Sampah/status/statusDiterima.dart';
 import 'package:sesampah/operator/Status%20Sampah/status/statusDitimbang.dart';
 import 'package:sesampah/operator/Status%20Sampah/status/statusSelesai.dart';
-import 'package:sesampah/operator/homeOperator.dart';
 
 class StatusSampah extends StatefulWidget {
   const StatusSampah({Key? key}) : super(key: key);
@@ -88,7 +87,7 @@ class _StatusSampahState extends State<StatusSampah> {
             ),
             const Expanded(
               child: TabBarView(children: [
-                StatusDiterima(),
+                StatusDiterima(address: '',),
                 StatusDibawa(),
                 StatusDitimbang(),
                 StatusSelesai(),

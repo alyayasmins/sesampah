@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sesampah/pages/location/lokasi.dart';
 import 'package:sesampah/pages/tarik_sampah/tarik.dart';
 import 'package:sesampah/pages/tukar_sampah/tukar.dart';
@@ -232,7 +233,8 @@ class _PageHomeState extends State<PageHome> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TarikSampah(balance: int.parse(balance!))));
+                                    builder: (context) => TarikSampah(
+                                        balance: int.parse(balance!))));
                           },
                           child: Container(
                             decoration: const BoxDecoration(

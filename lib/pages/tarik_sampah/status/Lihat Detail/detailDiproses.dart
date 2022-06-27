@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sesampah/pages/tarik_sampah/status/diproses.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailDiproses extends StatefulWidget {
-  const DetailDiproses({Key? key}) : super(key: key);
+  final String nominal;
+  const DetailDiproses({Key? key, required this.nominal}) : super(key: key);
 
   @override
   State<DetailDiproses> createState() => _DetailDiprosesState();
@@ -147,7 +147,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
                     ),
                   ),
                   Text(
-                    '',
+                    widget.nominal,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,

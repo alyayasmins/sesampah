@@ -22,19 +22,20 @@ class _PenarikanDiprosesState extends State<PenarikanDiproses> {
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      fullName = value.get('fullName');
-      setState(() {});
-    });
+    uid = await shared.getString('uid');
+    print(uid);
+    await FirebaseFirestore.instance.collection('users').doc(uid).get().then(
+      (doc) {
+        setState(() {
+          fullName = doc["fullName"];
+        });
+      },
+    );
   }
 
   String? uid;
   String? fullName;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -108,7 +109,7 @@ class _PenarikanDiprosesState extends State<PenarikanDiproses> {
                                 ),
                               ),
                               Text(
-                                '$fullName',
+                                fullName.toString(),
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 18,
@@ -143,7 +144,14 @@ class _PenarikanDiprosesState extends State<PenarikanDiproses> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: ((context) => DetailPenarikanDiproses())));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              DetailPenarikanDiproses(
+                                                  nominal: e.get('nominal'),
+                                                  name: e.get('name'),
+                                                  id: e.id))));
                                 },
                                 child: Text(
                                   "Lihat Detail",

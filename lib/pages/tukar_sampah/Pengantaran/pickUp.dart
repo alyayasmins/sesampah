@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sesampah/pages/Pesanan/pesanan.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PickUp extends StatefulWidget {
   const PickUp({Key? key}) : super(key: key);
@@ -9,6 +12,32 @@ class PickUp extends StatefulWidget {
 }
 
 class _PickUpState extends State<PickUp> {
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    uid = shared.getString('uid');
+    await FirebaseFirestore.instance
+        .collection('trashes')
+        .doc(uid)
+        .get()
+        .then((value) {
+      balance = value.get('balance').toString();
+
+      setState(() {});
+    });
+  }
+
+  String? balance;
+  String? uid;
+  static var today = new DateTime.now();
+  var formatedTanggal = new DateFormat.yMMMd().format(today);
+  TextEditingController addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +77,7 @@ class _PickUpState extends State<PickUp> {
               height: 20,
             ),
             TextFormField(
+              controller: addressController,
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   Icons.location_on,
@@ -104,9 +134,44 @@ class _PickUpState extends State<PickUp> {
                   height: 60,
                   width: 360,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Pesanan()));
+                    onPressed: () async {
+                      if (addressController.text == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Semua kolom wajib di isi!"),
+                            backgroundColor: Colors.grey,
+                          ),
+                        );
+                      } else {
+                        if (addressController != null) {
+                          print("Berhasil");
+                          // TODO: simpan data user baru ke koleksi user dengan dokumen id ambil dari result.uid
+                          await FirebaseFirestore.instance
+                              .collection('locations')
+                              .doc(uid)
+                              .set({
+                            'address': addressController.text,
+                            'coordinate': 0,
+                          });
+                          DocumentReference<Map<String, dynamic>> docRef =
+                              await FirebaseFirestore.instance
+                                  .collection('swapTrashes')
+                                  .add({
+                            'status': 'Belum Diproses',
+                            'userId': uid,
+                            'trash': '',
+                            'proof': '',
+                            'createdAt': formatedTanggal.toString(),
+                            'updatedAt': formatedTanggal.toString(),
+                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Pesanan(
+                                        address: addressController.text,
+                                      )));
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF375969),

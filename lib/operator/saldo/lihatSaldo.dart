@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/operator/homeOperator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LihatSaldo extends StatefulWidget {
   const LihatSaldo({Key? key}) : super(key: key);
@@ -10,6 +12,29 @@ class LihatSaldo extends StatefulWidget {
 
 class _LihatSaldoState extends State<LihatSaldo> {
   @override
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    uid = shared.getString('uid');
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      fullName = value.get('fullName');
+      balance = value.get('balance').toString();
+      setState(() {});
+    });
+  }
+
+  String? uid;
+  String? balance;
+  String? fullName;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,48 +57,74 @@ class _LihatSaldoState extends State<LihatSaldo> {
           color: Colors.black,
         ),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: Color(0xFF6FB2D2),
-        ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: FittedBox(
-            child: DataTable(
-              columns: <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    "No.",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.white),
+      body: ListView(
+        children: <Widget>[
+          DataTable(
+            columns: [
+              DataColumn(
+                label: Text(
+                  'No',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                DataColumn(
-                  label: Text(
-                    "Nama Pengguna",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.white),
+              ),
+              DataColumn(
+                label: Text(
+                  'Name',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                DataColumn(
-                  label: Text(
-                    "Saldo",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.white),
+              ),
+              DataColumn(
+                label: Text(
+                  'Saldo',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-              rows: [],
-            ),
+              ),
+            ],
+            rows: [
+              DataRow(cells: [
+                DataCell(
+                  Text(
+                    '1',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '$fullName',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '$balance',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ]),
+            ],
           ),
-        ),
+        ],
       ),
     );
   }

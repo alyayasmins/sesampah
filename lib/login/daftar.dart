@@ -282,12 +282,14 @@ class _DaftarState extends State<Daftar> {
                               'password': passwordController.text,
                               'address': addressController.text,
                               'balance': 0,
+                              'role': 'user'
                             });
 
                             SharedPreferences shared =
                                 await SharedPreferences.getInstance();
                             shared.setString('uid', result.uid);
-                            
+                            print(result.uid);
+
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

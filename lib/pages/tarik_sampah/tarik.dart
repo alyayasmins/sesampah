@@ -72,7 +72,7 @@ class _TarikSampahState extends State<TarikSampah> {
         leading: IconButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const BattomBar()));
+                MaterialPageRoute(builder: (context) =>  BattomBar()));
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sesampah/pages/Pesanan/status/Detail/detailSelesai.dart';
 import 'package:sesampah/pages/tarik_sampah/status/Lihat%20Detail/detailSelesai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -124,7 +123,9 @@ class _SelesaiState extends State<Selesai> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            DetailTarikSelesai()));
+                                            DetailTarikSelesai(
+                                              nominal: e.get('nominal'),
+                                            )));
                               },
                               child: Text(
                                 "Lihat Detail",

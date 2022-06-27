@@ -31,6 +31,12 @@ class _LihatSemuaState extends State<LihatSemua> {
           color: Colors.black,
         ),
       ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Row(
+          
+        ),
+      ),
     );
   }
 }
