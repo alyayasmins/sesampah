@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sesampah/pages/Pesanan/pesanan.dart';
+import 'package:sesampah/pages/location/lokasi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PickUp extends StatefulWidget {
-  const PickUp({Key? key}) : super(key: key);
+  final DocumentReference<Map<String, dynamic>>? docRef1;
+  const PickUp({this.docRef1, Key? key}) : super(key: key);
 
   @override
   State<PickUp> createState() => _PickUpState();
@@ -146,24 +148,23 @@ class _PickUpState extends State<PickUp> {
                         if (addressController != null) {
                           print("Berhasil");
                           // TODO: simpan data user baru ke koleksi user dengan dokumen id ambil dari result.uid
-                          await FirebaseFirestore.instance
-                              .collection('locations')
-                              .doc(uid)
-                              .set({
-                            'address': addressController.text,
-                            'coordinate': 0,
-                          });
-                          DocumentReference<Map<String, dynamic>> docRef =
-                              await FirebaseFirestore.instance
-                                  .collection('swapTrashes')
-                                  .add({
-                            'status': 'Belum Diproses',
-                            'userId': uid,
-                            'trash': '',
-                            'proof': '',
-                            'createdAt': formatedTanggal.toString(),
-                            'updatedAt': formatedTanggal.toString(),
-                          });
+
+                          // DocumentReference<Map<String, dynamic>> docRef =
+                          //     await FirebaseFirestore.instance
+                          //         .collection('swapTrashes')
+                          //         .add({
+                          //   'status': 'Belum Diproses',
+                          //   'userId': uid,
+                          //   'trash': '',
+                          //   'proof': '',
+                          //   'createdAt': formatedTanggal.toString(),
+                          //   'updatedAt': formatedTanggal.toString(),
+                          // });
+                          widget.docRef1!.set({
+                            'location': addressController.text,
+                            'coordinat': 0
+                          }, SetOptions(merge: true));
+                          print(widget.docRef1);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

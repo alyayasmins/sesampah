@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/tukar_sampah/Pengantaran/dropOff.dart';
 import 'package:sesampah/pages/tukar_sampah/Pengantaran/pickUp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubListCampuran extends StatefulWidget {
   const SubListCampuran({Key? key}) : super(key: key);
@@ -10,6 +12,19 @@ class SubListCampuran extends StatefulWidget {
 }
 
 class _SubListCampuranState extends State<SubListCampuran> {
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    uid = shared.getString('uid');
+  }
+
+  String? uid;
+  List<dynamic> categoty = [];
   int _counter = 0;
   bool _value = false;
 
@@ -33,6 +48,17 @@ class _SubListCampuranState extends State<SubListCampuran> {
               setState(
                 () {
                   _value = value!;
+                  List<dynamic>? category;
+                  if (_value = true) {
+                    categoty.add({
+                      'category': 'Campuran',
+                      'subCategory': 'Sampah Campuran',
+                    });
+                  } else {
+                    categoty
+                        .add({'category': '', 'subCategory': '', 'price': 0});
+                  }
+                  print(category);
                 },
               );
             },
@@ -42,7 +68,18 @@ class _SubListCampuranState extends State<SubListCampuran> {
             width: 360,
             child: ElevatedButton(
               onPressed: _value == true
-                  ? () {
+                  ? () async {
+                      print(categoty);
+                      DocumentReference<Map<String, dynamic>> docRef =
+                          await FirebaseFirestore.instance
+                              .collection('swapTrashes')
+                              .add({
+                        'userId': uid,
+                        'status': 'Belum Diproses',
+                        'createdAt': Timestamp.now(),
+                        'trash': categoty
+                      });
+                      print(docRef);
                       showModalBottomSheet(
                           backgroundColor: const Color(0xff6FB2D2),
                           context: context,
@@ -120,8 +157,69 @@ class _SubListCampuranState extends State<SubListCampuran> {
                                                   "Antar langsung sampahmu"),
                                               selected: _radioGroupA == 1,
                                             ),
-                                            Button(
-                                              value: _radioGroupA,
+                                            Container(
+                                              height: 60,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.9,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  if (_radioGroupA == 0) {
+                                                    docRef.set({
+                                                      'delivery': 'menjemput'
+                                                    }, SetOptions(merge: true));
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    PickUp(
+                                                                      docRef1:
+                                                                          docRef,
+                                                                    )));
+                                                  } else {
+                                                    FirebaseFirestore.instance
+                                                        .collection(
+                                                            'swapTrashes')
+                                                        .add({
+                                                      'delivery': 'Mengantarkan'
+                                                    });
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    DropOff()));
+                                                  }
+                                                },
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Lanjut',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Poppins',
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xff6FB2D2),
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ],
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Color(0xFFF0F4FD),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                ),
+                                              ),
                                             )
                                           ],
                                         ),

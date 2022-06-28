@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DetailPesananBelum extends StatefulWidget {
-  const DetailPesananBelum({Key? key}) : super(key: key);
+  List? trash;
+  String? location;
+  DetailPesananBelum({Key? key, required this.trash, required this.location})
+      : super(key: key);
 
   @override
   State<DetailPesananBelum> createState() => _DetailPesananBelumState();
@@ -70,22 +73,102 @@ class _DetailPesananBelumState extends State<DetailPesananBelum> {
           margin: EdgeInsets.all(15),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "Pesanan",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Pesanan",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text(
-                    "",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    child: Column(
+                      children: List.generate(widget.trash!.length, (index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.trash![index]['subCategory'],
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              widget.trash![index]['price'].toString() + '/kg',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                     ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.location_on),
+                          Text(
+                            "Lokasi Penjemputan",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Color(0xFF375969),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: Text(
+                          widget.location!,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.location_on),
+                          Text(
+                            "Lokasi Bank Sampah",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Color(0xFF375969),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: Text(
+                          'Sepat,Sukajaya, Kec.Sumedang Selatan,Jawa \nBarat',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),

@@ -1,14 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sesampah/pages/Pesanan/pesanan.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DropOff extends StatefulWidget {
-  const DropOff({Key? key}) : super(key: key);
+  final DocumentReference<Map<String, dynamic>>? docRef2;
+  const DropOff({Key? key, this.docRef2}) : super(key: key);
 
   @override
   State<DropOff> createState() => _DropOffState();
 }
 
 class _DropOffState extends State<DropOff> {
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
+
+  userData() async {
+    SharedPreferences shared = await SharedPreferences.getInstance();
+    uid = shared.getString('uid');
+    await FirebaseFirestore.instance
+        .collection('trashes')
+        .doc(uid)
+        .get()
+        .then((value) {
+      balance = value.get('balance').toString();
+
+      setState(() {});
+    });
+  }
+
+  String? balance;
+  String? uid;
+  static var today = new DateTime.now();
+  var formatedTanggal = new DateFormat.yMMMd().format(today);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,9 +107,29 @@ class _DropOffState extends State<DropOff> {
                   height: 60,
                   width: 360,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Pesanan(address: '',)));
+                    onPressed: () async {
+                      // DocumentReference<Map<String, dynamic>> docRef =
+                      //     await FirebaseFirestore.instance
+                      //         .collection('swapTrashes')
+                      //         .add({
+                      //   'status': 'Belum Diproses',
+                      //   'userId': uid,
+                      //   'trash': '',
+                      //   'proof': '',
+                      //   'createdAt': formatedTanggal.toString(),
+                      //   'updatedAt': formatedTanggal.toString(),
+                      // });
+                      widget.docRef2!.set({
+                        'location':
+                            'Sepat,Sukajaya, Kec.Sumedang Selatan,Jawa Barat',
+                        'coordinat': 0
+                      }, SetOptions(merge: true));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Pesanan(
+                                    address: '',
+                                  )));
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF375969),

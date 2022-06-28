@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StatusDiterima extends StatefulWidget {
-  final String address;
-  const StatusDiterima({Key? key, required this.address}) : super(key: key);
+  final String location;
+  const StatusDiterima({Key? key, required this.location}) : super(key: key);
 
   @override
   State<StatusDiterima> createState() => _StatusDiterimaState();
@@ -13,33 +13,20 @@ class StatusDiterima extends StatefulWidget {
 class _StatusDiterimaState extends State<StatusDiterima> {
   void initState() {
     // TODO: implement initState
-    dataUser();
+
     userData();
     super.initState();
-  }
-
-  dataUser() async {
-    SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
-    await FirebaseFirestore.instance
-        .collection('swapTrashes')
-        .doc(uid)
-        .get()
-        .then((value) {
-      fullName = value.get('fullName ');
-      setState(() {});
-    });
   }
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
     uid = shared.getString('uid');
     await FirebaseFirestore.instance
-        .collection('locations')
+        .collection('users')
         .doc(uid)
         .get()
         .then((value) {
-      address = value.get('address');
+      fullName = value.get('fullName');
       setState(() {});
     });
   }
@@ -101,7 +88,7 @@ class _StatusDiterimaState extends State<StatusDiterima> {
                               ),
                             ),
                             Text(
-                              "data",
+                              e.get('delivery'),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -119,33 +106,52 @@ class _StatusDiterimaState extends State<StatusDiterima> {
                                 fontSize: 18,
                               ),
                             ),
-                            Text(
-                              "$fullName",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
+                            FutureBuilder<DocumentSnapshot<Map>>(
+                              future: FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(e.get('userId'))
+                                  .get(),
+                              builder: ((context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return SizedBox();
+                                } else {
+                                  return Text(
+                                    snapshot.data!.data()!['fullName'] ?? '',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                    ),
+                                  );
+                                }
+                              }),
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        Column(
+                          children:
+                              List.generate(e.get('trash').length, (index) {
+                            print(e.get('trash').length);
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  e.get('trash')[index]['subCategory'],
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  e.get('trash')[index]['price'].toString() +
+                                      '/kg',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
                         ),
                         SizedBox(
                           height: 10,
@@ -157,7 +163,7 @@ class _StatusDiterimaState extends State<StatusDiterima> {
                               children: [
                                 Icon(Icons.location_on),
                                 Text(
-                                  "Lokasi Pengantaran",
+                                  "Lokasi Penjemputan",
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.bold,
@@ -167,11 +173,14 @@ class _StatusDiterimaState extends State<StatusDiterima> {
                                 ),
                               ],
                             ),
-                            Text(
-                              '$address',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
+                            Container(
+                              margin: EdgeInsets.all(10),
+                              child: Text(
+                                e.get('location'),
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 16,
+                                ),
                               ),
                             )
                           ],

@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class dsDibawa extends StatefulWidget {
-  const dsDibawa({Key? key}) : super(key: key);
+  List? trash;
+  String? location;
+  String? name;
+  String? delivery;
+  dsDibawa({
+    Key? key,
+    required this.trash,
+    required this.delivery,
+    required this.location,
+    required this.name,
+  }) : super(key: key);
 
   @override
   State<dsDibawa> createState() => _dsDibawaState();
@@ -88,7 +98,7 @@ class _dsDibawaState extends State<dsDibawa> {
                           ),
                         ),
                         Text(
-                          'data',
+                          widget.name!,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -110,7 +120,7 @@ class _dsDibawaState extends State<dsDibawa> {
                           ),
                         ),
                         Text(
-                          'data',
+                          widget.delivery!,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -129,17 +139,30 @@ class _dsDibawaState extends State<dsDibawa> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(15),
                       child: Column(
-                        children: [
-                          Text(
-                            "Kertas Arsip",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: Color(0xFF375969)),
-                          ),
-                        ],
+                        children: List.generate(widget.trash!.length, (index) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.trash![index]['subCategory'],
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                widget.trash![index]['price'].toString() +
+                                    '/kg',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
                       ),
                     ),
                     SizedBox(
@@ -168,31 +191,31 @@ class _dsDibawaState extends State<dsDibawa> {
                     SizedBox(
                       height: 8,
                     ),
-                    Text(
-                      "Lokasi Penjemputan",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 30,
-                          color: Color(0xff375969),
+                        Row(
+                          children: [
+                            Icon(Icons.location_on),
+                            Text(
+                              "Lokasi Penjemputan",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Color(0xFF375969),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "$address",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            widget.location!,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                            ),
                           ),
                         )
                       ],
@@ -204,12 +227,12 @@ class _dsDibawaState extends State<dsDibawa> {
                         width: 388,
                         child: ElevatedButton(
                           onPressed: () {
-                            // FirebaseFirestore.instance
-                            //     .collection('balanceWithdraw')
-                            //     .doc('userId')
-                            //     .update(
-                            //   {'status': "Selesai"},
-                            // );
+                            FirebaseFirestore.instance
+                                .collection('swapTrashes')
+                                .doc()
+                                .update(
+                              {'status': "Ditimbang"},
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             primary: const Color(0xFF375969),

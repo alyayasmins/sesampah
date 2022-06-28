@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/tukar_sampah/Pengantaran/dropOff.dart';
 import 'package:sesampah/pages/tukar_sampah/Pengantaran/pickUp.dart';
-import 'package:sesampah/pages/tukar_sampah/tukar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SubListKertas extends StatefulWidget {
@@ -22,7 +21,6 @@ class _SubListKertasState extends State<SubListKertas> {
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
     uid = shared.getString('uid');
-    ;
   }
 
   String? uid;
@@ -30,6 +28,8 @@ class _SubListKertasState extends State<SubListKertas> {
   bool _value = false;
   bool _value2 = false;
   bool _value3 = false;
+
+  List<dynamic> categoty = [];
 
   int _radioGroupA = 0;
   void _handleRadioValueChanged(int? value) {
@@ -50,15 +50,18 @@ class _SubListKertasState extends State<SubListKertas> {
                 title: const Text("Arsip"),
                 value: _value,
                 onChanged: (value) {
-                  FirebaseFirestore.instance.collection('swapTrashes').add({
-                    'category': 'Kertas',
-                    'subCategory': {'category': ' Arsip', 'price': '750'},
-                    'userId': uid,
-                  });
-
                   setState(
                     () {
                       _value = value!;
+                      List<dynamic>? category;
+                      if (_value = true) {
+                        categoty.add({
+                          'category': 'kertas',
+                          'subCategory': 'Arsip',
+                          'price': 750
+                        });
+                      }
+                      print(category);
                     },
                   );
                   ;
@@ -70,11 +73,16 @@ class _SubListKertasState extends State<SubListKertas> {
                 onChanged: (value2) {
                   setState(
                     () {
-                      FirebaseFirestore.instance.collection('swapTrashes').add({
-                        'category': 'Kertas',
-                        'subCategory': {'category': ' Duplex', 'price': '250'}
-                      });
                       _value2 = value2!;
+                      List<dynamic>? category;
+                      if (_value2 = true) {
+                        categoty.add({
+                          'category': 'kertas',
+                          'subCategory': 'Duplex',
+                          'price': 250
+                        });
+                      }
+                      print(category);
                     },
                   );
                 },
@@ -83,13 +91,22 @@ class _SubListKertasState extends State<SubListKertas> {
                 title: const Text("Kardus"),
                 value: _value3,
                 onChanged: (value3) {
-                  FirebaseFirestore.instance.collection('swapTrashes').add({
-                    'category': 'Kertas',
-                    'subCategory': {'category': ' Kardus', 'price': '2000'}
-                  });
                   setState(
                     () {
                       _value3 = value3!;
+                      List<dynamic>? category;
+                      if (_value3 = true) {
+                        categoty.add({
+                          'category': 'kertas',
+                          'subCategory': 'Kardus',
+                          'price': 2000
+                        });
+                      } else {
+                        categoty.add(
+                            {'category': '', 'subCategory': '', 'price': 0});
+                      }
+                      ;
+                      print(categoty);
                     },
                   );
                 },
@@ -101,7 +118,18 @@ class _SubListKertasState extends State<SubListKertas> {
             width: 360,
             child: ElevatedButton(
               onPressed: _value || _value2 || _value3 == true
-                  ? () {
+                  ? () async {
+                      print(categoty);
+                      DocumentReference<Map<String, dynamic>> docRef =
+                          await FirebaseFirestore.instance
+                              .collection('swapTrashes')
+                              .add({
+                        'userId': uid,
+                        'status': 'Belum Diproses',
+                        'createdAt': Timestamp.now(),
+                        'trash': categoty
+                      });
+                      print(docRef);
                       showModalBottomSheet(
                           backgroundColor: const Color(0xff6FB2D2),
                           context: context,
@@ -179,8 +207,69 @@ class _SubListKertasState extends State<SubListKertas> {
                                                   "Antar langsung sampahmu"),
                                               selected: _radioGroupA == 1,
                                             ),
-                                            Button(
-                                              value: _radioGroupA,
+                                            Container(
+                                              height: 60,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.9,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  if (_radioGroupA == 0) {
+                                                    docRef.set({
+                                                      'delivery': 'Menjemput'
+                                                    }, SetOptions(merge: true));
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PickUp(
+                                                          docRef1: docRef,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    docRef.set({
+                                                      'delivery': 'Mengantarkan'
+                                                    }, SetOptions(merge: true));
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DropOff(
+                                                                docRef2:
+                                                                    docRef),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Lanjut',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Poppins',
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xff6FB2D2),
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ],
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Color(0xFFF0F4FD),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                ),
+                                              ),
                                             )
                                           ],
                                         ),
@@ -206,59 +295,6 @@ class _SubListKertasState extends State<SubListKertas> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class Button extends StatelessWidget {
-  final int value;
-  const Button({
-    required this.value,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: MediaQuery.of(context).size.width * 0.9,
-      child: ElevatedButton(
-        onPressed: () {
-          if (value == 0) {
-            FirebaseFirestore.instance.collection('swapTrashes').add({
-              'delivery': 'Menjemput',
-            });
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PickUp()));
-          } else {
-            FirebaseFirestore.instance.collection('swapTrashes').add({
-              'delivery': 'Mengantarkan',
-            });
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => DropOff()));
-          }
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Lanjut',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff6FB2D2),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xFFF0F4FD),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
       ),
     );
   }

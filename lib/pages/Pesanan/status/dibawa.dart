@@ -18,7 +18,7 @@ class _SampahDibawaState extends State<SampahDibawa> {
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
+    uid = await shared.getString('uid');
     await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -41,6 +41,7 @@ class _SampahDibawaState extends State<SampahDibawa> {
             .snapshots(),
         builder: (_, snapshots) {
           if (snapshots.hasData) {
+            print(snapshots.data!.size);
             return ListView(
               children: [
                 ...snapshots.data!.docs.map(
@@ -85,7 +86,7 @@ class _SampahDibawaState extends State<SampahDibawa> {
                               ),
                             ),
                             Text(
-                              'data',
+                              e.get('delivery'),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -93,24 +94,31 @@ class _SampahDibawaState extends State<SampahDibawa> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              'data',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        Column(
+                          children:
+                              List.generate(e.get('trash').length, (index) {
+                            print(e.get('trash').length);
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  e.get('trash')[index]['subCategory'],
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  e.get('trash')[index]['price'].toString() +
+                                      '/kg',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,

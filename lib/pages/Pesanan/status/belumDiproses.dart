@@ -19,7 +19,7 @@ class _SampahBelumState extends State<SampahBelum> {
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
+    uid = await shared.getString('uid');
     await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -86,7 +86,7 @@ class _SampahBelumState extends State<SampahBelum> {
                               ),
                             ),
                             Text(
-                              'data',
+                              e.get('delivery'),
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -94,24 +94,31 @@ class _SampahBelumState extends State<SampahBelum> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'data',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              'data',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        Column(
+                          children:
+                              List.generate(e.get('trash').length, (index) {
+                            print(e.get('trash').length);
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  e.get('trash')[index]['subCategory'],
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  e.get('trash')[index]['price'].toString() +
+                                      '/kg',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -119,10 +126,14 @@ class _SampahBelumState extends State<SampahBelum> {
                             TextButton(
                               onPressed: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailPesananBelum()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailPesananBelum(
+                                      trash: e.get('trash'),
+                                      location: e.get('location'),
+                                    ),
+                                  ),
+                                );
                               },
                               child: Text(
                                 "Lihat Detail",

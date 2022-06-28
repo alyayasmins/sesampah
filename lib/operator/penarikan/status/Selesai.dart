@@ -170,9 +170,9 @@ class _PenarikanSelesaiState extends State<PenarikanSelesai> {
                                     builder: (context) =>
                                         DetailPenarikanSelesai(
                                       nominal: e.get('nominal'),
-                                      name: e.get('name'),
                                       status: e.get('status'),
                                       id: e.id,
+                                      doc: e,
                                     ),
                                   ),
                                 );

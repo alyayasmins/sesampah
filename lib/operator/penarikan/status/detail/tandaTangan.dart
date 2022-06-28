@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +15,8 @@ import 'package:path/path.dart';
 const directoryName = 'Signature';
 
 class TandaTangan extends StatefulWidget {
-  const TandaTangan({Key? key}) : super(key: key);
+  final DocumentSnapshot doc;
+  const TandaTangan({Key? key, required this.doc}) : super(key: key);
 
   @override
   _TandaTanganState createState() => _TandaTanganState();
@@ -53,8 +55,10 @@ class _TandaTanganState extends State<TandaTangan> {
     await Directory('$path/$directoryName').create(recursive: true);
 
 // write to storage as a filename.png
-    File('$path/$directoryName/filename.png')
-        .writeAsBytesSync(bytes!.buffer.asInt8List());
+    _imageFile = await File('$path/$directoryName/filename.png')
+        .writeAsBytes(bytes!.buffer.asInt8List());
+
+    setState(() {});
     await Navigator.of(this.context).push(
       MaterialPageRoute(
         builder: (BuildContext context) {
@@ -62,7 +66,22 @@ class _TandaTanganState extends State<TandaTangan> {
             appBar: AppBar(
               actions: [
                 TextButton(
-                  onPressed: () => uploadImageToFirebase(context),
+                  onPressed: () async {
+                    String url = await uploadImageToFirebase(context);
+                    await FirebaseFirestore.instance
+                        .collection('balanceWithdraw')
+                        .doc(widget.doc.id)
+                        .update({'proof': url, 'status': 'Selesai'});
+                    print(widget.doc.id);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => DetailPenarikanSelesai(
+                    //             nominal: '', name: '', id: '', status: '')));
+                  },
                   child: Text(
                     'Selesai',
                     style: TextStyle(
@@ -70,7 +89,7 @@ class _TandaTanganState extends State<TandaTangan> {
                         fontSize: 18,
                         color: Colors.white),
                   ),
-                )
+                ),
               ],
               centerTitle: true,
               leading: IconButton(
@@ -122,15 +141,14 @@ class _TandaTanganState extends State<TandaTangan> {
     });
   }
 
-  Future uploadImageToFirebase(BuildContext context) async {
+  Future<String> uploadImageToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile!.path);
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('sign/$fileName');
     UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
     TaskSnapshot taskSnapshot = await uploadTask;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-        );
+    String urlDownload = await taskSnapshot.ref.getDownloadURL();
+    return urlDownload;
   }
 
   @override

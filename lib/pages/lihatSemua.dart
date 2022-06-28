@@ -34,7 +34,13 @@ class _LihatSemuaState extends State<LihatSemua> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Row(
-          
+          children: [
+            // Container(
+            //   height: 100,
+            //   widt
+            //   child: ,
+            // )
+          ],
         ),
       ),
     );

@@ -149,9 +149,10 @@ class _PenarikanDiprosesState extends State<PenarikanDiproses> {
                                       MaterialPageRoute(
                                           builder: ((context) =>
                                               DetailPenarikanDiproses(
-                                                  nominal: e.get('nominal'),
-                                                  name: e.get('name'),
-                                                  id: e.id))));
+                                                nominal: e.get('nominal'),
+                                                id: e.id,
+                                                doc: e,
+                                              ))));
                                 },
                                 child: Text(
                                   "Lihat Detail",

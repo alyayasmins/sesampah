@@ -87,7 +87,7 @@ class _StatusSampahState extends State<StatusSampah> {
             ),
             const Expanded(
               child: TabBarView(children: [
-                StatusDiterima(address: '',),
+                StatusDiterima(location: '',),
                 StatusDibawa(),
                 StatusDitimbang(),
                 StatusSelesai(),

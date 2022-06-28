@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,15 +12,16 @@ import 'package:pdf/widgets.dart' as pw;
 
 class DetailPenarikanSelesai extends StatefulWidget {
   final String nominal;
-  final String name;
+
   final String status;
   final String id;
-  const DetailPenarikanSelesai(
+  DocumentSnapshot? doc;
+  DetailPenarikanSelesai(
       {Key? key,
       required this.nominal,
-      required this.name,
       required this.id,
-      required this.status})
+      required this.status,
+      required this.doc})
       : super(key: key);
 
   @override
@@ -34,15 +37,15 @@ class _DetailPenarikanSelesaiState extends State<DetailPenarikanSelesai> {
 
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      fullName = value.get('fullName');
-      setState(() {});
-    });
+    uid = await shared.getString('uid');
+    print(uid);
+    await FirebaseFirestore.instance.collection('users').doc(uid).get().then(
+      (doc) {
+        setState(() {
+          fullName = doc["fullName"];
+        });
+      },
+    );
   }
 
   String? uid;
@@ -52,12 +55,12 @@ class _DetailPenarikanSelesaiState extends State<DetailPenarikanSelesai> {
   var formatedTanggal = new DateFormat.yMMMd().format(today);
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+    return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection('balanceWithdraw')
-          .where('status', isEqualTo: 'Selesai')
+          .doc(widget.doc!.id)
           .snapshots(),
-      builder: (_, snapshot) {
+      builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(
@@ -138,7 +141,7 @@ class _DetailPenarikanSelesaiState extends State<DetailPenarikanSelesai> {
                             ),
                           ),
                           Text(
-                            '$fullName',
+                            fullName.toString(),
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
@@ -202,7 +205,7 @@ class _DetailPenarikanSelesaiState extends State<DetailPenarikanSelesai> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),
-
+                      Image.network(snapshot.data!.get('proof'))
                       // Container(
                       //   margin: EdgeInsets.all(15),
                       //   child: SizedBox(

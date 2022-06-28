@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sesampah/pages/Pesanan/status/belumDiproses.dart';
+import 'package:sesampah/pages/Pesanan/status/dibawa.dart';
+import 'package:sesampah/pages/Pesanan/status/ditimbang.dart';
+import 'package:sesampah/pages/Pesanan/status/selesai.dart';
 
 class Pesanan extends StatefulWidget {
   final String address;
@@ -79,9 +82,9 @@ class _PesananState extends State<Pesanan> {
             Expanded(
               child: TabBarView(children: [
                 SampahBelum(),
-                Text(""),
-                Text(""),
-                Text(""),
+                SampahDibawa(),
+                SampahDitimbang(),
+                SampahSelesai(),
               ]),
             )
           ],
