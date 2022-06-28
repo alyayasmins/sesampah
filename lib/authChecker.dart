@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sesampah/login/introLogin.dart';
 import 'package:sesampah/operator/homeOperator.dart';
 import 'package:sesampah/pages/home_page/bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +14,6 @@ class authCheck extends StatefulWidget {
 
 class _authCheckState extends State<authCheck> {
   void initState() {
-    // TODO: implement initState
-
     super.initState();
     userData();
   }
@@ -28,19 +27,24 @@ class _authCheckState extends State<authCheck> {
         .doc(uid)
         .get()
         .then((value) {
-      if (value.get('role') == 'operator') {
-        print('role');
-        Future.delayed(Duration.zero, () {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: ((context) => HomeOperator())));
-        });
-      } else {
-        if (value.get('role') == 'user') {
+      if (value.exists) {
+        if (value.get('role') == 'operator') {
+          print('role');
           Future.delayed(Duration.zero, () {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: ((context) => BattomBar())));
+                MaterialPageRoute(builder: ((context) => HomeOperator())));
           });
+        } else {
+          if (value.get('role') == 'user') {
+            Future.delayed(Duration.zero, () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: ((context) => BattomBar())));
+            });
+          }
         }
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => FirstPage())));
       }
     });
   }

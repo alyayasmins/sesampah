@@ -52,7 +52,8 @@ class _StatusSelesaiState extends State<StatusSelesai> {
                           children: [
                             Container(
                               height: 30,
-                              width: 90,
+                              // width: 90,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: Color(0xFF6FB2D2),

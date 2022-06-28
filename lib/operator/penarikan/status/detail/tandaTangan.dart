@@ -15,8 +15,10 @@ import 'package:path/path.dart';
 const directoryName = 'Signature';
 
 class TandaTangan extends StatefulWidget {
+  final int nominal;
   final DocumentSnapshot doc;
-  const TandaTangan({Key? key, required this.doc}) : super(key: key);
+  const TandaTangan({Key? key, required this.nominal, required this.doc})
+      : super(key: key);
 
   @override
   _TandaTanganState createState() => _TandaTanganState();
@@ -72,6 +74,12 @@ class _TandaTanganState extends State<TandaTangan> {
                         .collection('balanceWithdraw')
                         .doc(widget.doc.id)
                         .update({'proof': url, 'status': 'Selesai'});
+
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(widget.doc.get('userId'))
+                        .update(
+                            {'balance': FieldValue.increment(-widget.nominal)});
                     print(widget.doc.id);
                     Navigator.pop(context);
                     Navigator.pop(context);

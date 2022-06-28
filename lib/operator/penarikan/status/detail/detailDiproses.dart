@@ -7,11 +7,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DetailPenarikanDiproses extends StatefulWidget {
   final String nominal;
   final String id;
+  final String fullName;
   DocumentSnapshot doc;
 
-  DetailPenarikanDiproses(
-      {Key? key, required this.nominal, required this.id, required this.doc})
-      : super(key: key);
+  DetailPenarikanDiproses({
+    Key? key,
+    required this.nominal,
+    required this.id,
+    required this.fullName,
+    required this.doc,
+  }) : super(key: key);
 
   @override
   State<DetailPenarikanDiproses> createState() =>
@@ -30,18 +35,18 @@ class _DetailPenarikanDiprosesState extends State<DetailPenarikanDiproses> {
   userData() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
     uid = await shared.getString('uid');
-    print(uid);
-    await FirebaseFirestore.instance.collection('users').doc(uid).get().then(
-      (doc) {
-        setState(() {
-          fullName = doc["fullName"];
-        });
-      },
-    );
+    // print(uid);
+    // await FirebaseFirestore.instance.collection('users').doc(uid).get().then(
+    //   (doc) {
+    //     setState(() {
+    //       fullName = doc["fullName"];
+    //     });
+    //   },
+    // );
   }
 
   String? uid;
-  String? fullName;
+  // String? fullName;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +124,7 @@ class _DetailPenarikanDiprosesState extends State<DetailPenarikanDiproses> {
                                     ),
                                   ),
                                   Text(
-                                    fullName.toString(),
+                                    widget.fullName,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 16,
@@ -200,6 +205,7 @@ class _DetailPenarikanDiprosesState extends State<DetailPenarikanDiproses> {
                                 MaterialPageRoute(
                                     builder: (context) => TandaTangan(
                                           doc: snapshot.data!,
+                                          nominal: int.parse(widget.nominal),
                                         )));
                           },
                           style: ElevatedButton.styleFrom(

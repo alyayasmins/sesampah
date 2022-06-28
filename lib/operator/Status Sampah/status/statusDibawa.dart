@@ -62,7 +62,8 @@ class _StatusDibawaState extends State<StatusDibawa> {
                               children: [
                                 Container(
                                   height: 30,
-                                  width: 90,
+                                  // width: 90,
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     color: Color(0xFF6FB2D2),
@@ -159,6 +160,7 @@ class _StatusDibawaState extends State<StatusDibawa> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => dsDibawa(
+                                          docId: e.id,
                                           delivery: e.get('delivery'),
                                           location: e.get('location'),
                                           name: snapshot.data!

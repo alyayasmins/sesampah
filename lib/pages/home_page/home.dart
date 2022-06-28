@@ -95,7 +95,8 @@ class _PageHomeState extends State<PageHome> {
                             "Fitur ini masih dalam tahap perencanaan",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: 'Poppins', color: Color(0xff757575)),
+                                fontFamily: 'Poppins',
+                                color: Color(0xff757575)),
                           ),
                           actions: [
                             Center(
@@ -176,131 +177,147 @@ class _PageHomeState extends State<PageHome> {
               Container(
                 margin: const EdgeInsets.only(top: 10, left: 28, right: 23),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 130,
-                          width: 110,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                shadowColor: Colors.grey,
-                                elevation: 5,
-                                primary: Colors.white),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const TukarSampah()));
-                            },
-                            child: Container(
-                              height: 90,
-                              width: 90,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/image/trash-can.png')),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: Colors.grey,
+                                  elevation: 5,
+                                  primary: Colors.white),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const TukarSampah()));
+                              },
+                              child: Container(
+                                height: 90,
+                                width: 90,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/image/trash-can.png')),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Text(
-                          "Tukar Sampah",
-                          style: TextStyle(
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text(
+                            "Tukar Sampah",
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       width: 16,
                     ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 130,
-                          width: 110,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                shadowColor: Colors.grey,
-                                elevation: 5,
-                                primary: Colors.white),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TarikSampah(
-                                          balance: int.parse(balance!))));
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/image/coin.png')),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: Colors.grey,
+                                  elevation: 5,
+                                  primary: Colors.white),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TarikSampah(
+                                            balance: int.parse(balance!))));
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image:
+                                          AssetImage('assets/image/coin.png')),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Text(
-                          "Tarik Saldo",
-                          style: TextStyle(
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text(
+                            "Tarik Saldo",
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       width: 16,
                     ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 130,
-                          width: 110,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                shadowColor: Colors.grey,
-                                elevation: 5,
-                                primary: Colors.white),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Location()));
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/image/location.png')),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: Colors.grey,
+                                  elevation: 5,
+                                  primary: Colors.white),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Location()));
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/image/location.png')),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        const Text(
-                          "Lokasi Sampah",
-                          style: TextStyle(
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text(
+                            "Lokasi Sampah",
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),

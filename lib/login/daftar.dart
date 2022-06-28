@@ -138,7 +138,8 @@ class _DaftarState extends State<Daftar> {
                                   Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: TextFormField(
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         controller: emailController,
                                         decoration: InputDecoration(
                                             hintText: "Masukkan Email",
@@ -254,6 +255,7 @@ class _DaftarState extends State<Daftar> {
                   : Container(
                       height: 60,
                       width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 20),
                       child: ElevatedButton(
                         onPressed: () async {
                           setState(() {

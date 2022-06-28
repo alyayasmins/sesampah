@@ -19,22 +19,13 @@ class _LihatSaldoState extends State<LihatSaldo> {
   }
 
   userData() async {
-    SharedPreferences shared = await SharedPreferences.getInstance();
-    uid = shared.getString('uid');
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) {
-      fullName = value.get('fullName');
-      balance = value.get('balance').toString();
+    await FirebaseFirestore.instance.collection('users').get().then((value) {
+      docs = value.docs;
       setState(() {});
     });
   }
 
-  String? uid;
-  String? balance;
-  String? fullName;
+  List<DocumentSnapshot>? docs;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -57,75 +48,82 @@ class _LihatSaldoState extends State<LihatSaldo> {
           color: Colors.black,
         ),
       ),
-      body: ListView(
-        children: <Widget>[
-          DataTable(
-            columns: [
-              DataColumn(
-                label: Text(
-                  'No',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Name',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Saldo',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-            rows: [
-              DataRow(cells: [
-                DataCell(
-                  Text(
-                    '1',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
+      body: docs == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView(
+              children: <Widget>[
+                DataTable(
+                  columns: [
+                    DataColumn(
+                      label: Text(
+                        'No',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Name',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Saldo',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: List.generate(
+                    docs!.length,
+                    (i) => DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            (i + 1).toString(),
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            docs![i].get('fullName'),
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            docs![i].get('balance').toString(),
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                DataCell(
-                  Text(
-                    '$fullName',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    '$balance',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ]),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
     );
   }
 }

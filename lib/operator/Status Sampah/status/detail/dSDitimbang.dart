@@ -2,16 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:sesampah/operator/Status%20Sampah/status/detail/Timbangan.dart';
 
 class dsDitimbang extends StatefulWidget {
-  const dsDitimbang({Key? key}) : super(key: key);
+  final String docId;
+  final String userId;
+  final String fullName;
+  final String delivery;
+  final List trashes;
+
+  const dsDitimbang({
+    Key? key,
+    required this.docId,
+    required this.userId,
+    required this.fullName,
+    required this.delivery,
+    required this.trashes,
+  }) : super(key: key);
 
   @override
   State<dsDitimbang> createState() => _dsDitimbangState();
 }
 
 class _dsDitimbangState extends State<dsDitimbang> {
-  void _showNotification() {
-    
-  }
+  void _showNotification() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +67,7 @@ class _dsDitimbangState extends State<dsDitimbang> {
                           ),
                         ),
                         Text(
-                          'data',
+                          widget.fullName,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -78,7 +89,7 @@ class _dsDitimbangState extends State<dsDitimbang> {
                           ),
                         ),
                         Text(
-                          'data',
+                          widget.delivery,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -96,19 +107,29 @@ class _dsDitimbangState extends State<dsDitimbang> {
                         fontSize: 16,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Kertas Arsip",
-                            style: TextStyle(
+                    Column(
+                      children: List.generate(widget.trashes.length, (index) {
+                        print(widget.trashes.length);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.trashes[index]['subCategory'],
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: Color(0xFF375969)),
-                          ),
-                        ],
-                      ),
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              widget.trashes[index]['price'].toString() + '/kg',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                     SizedBox(
                       height: 5,
@@ -193,7 +214,13 @@ class _dsDitimbangState extends State<dsDitimbang> {
                                     onPressed: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: ((context) => Timbangan()),
+                                        builder: (context) => Timbangan(
+                                          userId: widget.userId,
+                                          docId: widget.docId,
+                                          fullName: widget.fullName,
+                                          delivery: widget.delivery,
+                                          trashes: widget.trashes,
+                                        ),
                                       ),
                                     ),
                                     style: OutlinedButton.styleFrom(

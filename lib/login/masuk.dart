@@ -185,6 +185,7 @@ class _MasukState extends State<Masuk> {
                 : Container(
                     height: 60,
                     width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () async {
                         setState(() {

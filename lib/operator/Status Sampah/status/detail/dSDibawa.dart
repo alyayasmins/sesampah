@@ -7,12 +7,14 @@ class dsDibawa extends StatefulWidget {
   String? location;
   String? name;
   String? delivery;
+  String docId;
   dsDibawa({
     Key? key,
     required this.trash,
     required this.delivery,
     required this.location,
     required this.name,
+    required this.docId,
   }) : super(key: key);
 
   @override
@@ -229,10 +231,12 @@ class _dsDibawaState extends State<dsDibawa> {
                           onPressed: () {
                             FirebaseFirestore.instance
                                 .collection('swapTrashes')
-                                .doc()
+                                .doc(widget.docId)
                                 .update(
                               {'status': "Ditimbang"},
                             );
+
+                            Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
                             primary: const Color(0xFF375969),

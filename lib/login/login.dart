@@ -73,71 +73,76 @@ class Login extends StatelessWidget {
                     const SizedBox(
                       height: 80,
                     ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 345,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                debugPrint("test");
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Daftar()));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                              child: const Text(
-                                "Daftar",
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF6FB2D2)),
-                              )),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Sudah punya akun?",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  debugPrint("test");
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const Masuk()));
-                                },
-                                child: const Text(
-                                  "Masuk",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black),
-                                ))
-                          ],
-                        )
-                      ],
-                    )
                   ],
                 ),
               ),
             ],
           ),
+        ),
+      ),
+      bottomSheet: Container(
+        color: const Color(0xff6FB2D2),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 345,
+              child: ElevatedButton(
+                  onPressed: () {
+                    debugPrint("test");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Daftar()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  child: const Text(
+                    "Daftar",
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF6FB2D2)),
+                  )),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Sudah punya akun?",
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
+                TextButton(
+                    onPressed: () {
+                      debugPrint("test");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Masuk()));
+                    },
+                    child: const Text(
+                      "Masuk",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ))
+              ],
+            )
+          ],
         ),
       ),
     );

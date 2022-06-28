@@ -1,14 +1,28 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:sesampah/operator/Status%20Sampah/status.dart';
 
-
 class Timbangan extends StatefulWidget {
+  final String docId;
+  final String userId;
+  final String fullName;
+  final String delivery;
+  final List trashes;
+
+  Timbangan({
+    required this.docId,
+    required this.userId,
+    required this.fullName,
+    required this.delivery,
+    required this.trashes,
+  });
+
   @override
   _TimbanganState createState() => _TimbanganState();
 }
@@ -26,15 +40,14 @@ class _TimbanganState extends State<Timbangan> {
     });
   }
 
-  Future uploadImageToFirebase(BuildContext context) async {
+  Future<String?> uploadImageToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile!.path);
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
     TaskSnapshot taskSnapshot = await uploadTask;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-        );
+    String urlDownload = await taskSnapshot.ref.getDownloadURL();
+    return urlDownload;
   }
 
   @override
@@ -82,7 +95,7 @@ class _TimbanganState extends State<Timbangan> {
                           ),
                         ),
                         Text(
-                          'data',
+                          widget.fullName,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -104,7 +117,7 @@ class _TimbanganState extends State<Timbangan> {
                           ),
                         ),
                         Text(
-                          'data',
+                          widget.delivery,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
@@ -122,19 +135,29 @@ class _TimbanganState extends State<Timbangan> {
                         fontSize: 16,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Kertas Arsip",
-                            style: TextStyle(
+                    Column(
+                      children: List.generate(widget.trashes.length, (index) {
+                        widget.trashes[index]['weight'] = 0;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.trashes[index]['subCategory'],
+                              style: TextStyle(
                                 fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: Color(0xFF375969)),
-                          ),
-                        ],
-                      ),
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              widget.trashes[index]['price'].toString() + '/kg',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                     SizedBox(
                       height: 8,
@@ -169,48 +192,50 @@ class _TimbanganState extends State<Timbangan> {
                         fontSize: 16,
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Masukkan Berat",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+
+                    Column(
+                      children: List.generate(
+                        widget.trashes.length,
+                        (i) => Container(
+                          margin: EdgeInsets.only(bottom: 8),
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) =>
+                                widget.trashes[i]['weight'] = int.parse(value),
+                            onSubmitted: (value) =>
+                                widget.trashes[i]['weight'] = int.parse(value),
+                            decoration: InputDecoration(
+                              hintText:
+                                  "Masukkan Berat ${widget.trashes[i]['subCategory']}",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      "Harga /kg",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Masukkan Harga /kg",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      "Total :",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 8,
+                    // ),
+                    // Text(
+                    //   "Harga /kg",
+                    //   style: TextStyle(
+                    //     fontFamily: 'Poppins',
+                    //     fontSize: 16,
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 8,
+                    // ),
+                    // TextFormField(
+                    //   decoration: InputDecoration(
+                    //     hintText: "Masukkan Harga /kg",
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 8,
                     ),
@@ -221,40 +246,40 @@ class _TimbanganState extends State<Timbangan> {
                         fontSize: 16,
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Bukti",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(
-                                left: 30.0, right: 30.0, top: 10.0),
-                            child: _imageFile != null
-                                ? Image.file(_imageFile!)
-                                : IconButton(
-                                    icon: Icon(
-                                      Icons.add_a_photo,
-                                      size: 40,
-                                    ),
-                                    onPressed: pickImage,
-                                  ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    uploadImageButton(context),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Text(
+                    //   "Bukti",
+                    //   style: TextStyle(
+                    //       fontFamily: 'Poppins',
+                    //       fontSize: 18,
+                    //       fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: 8,
+                    // ),
+                    // Center(
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Container(
+                    //         margin: const EdgeInsets.only(
+                    //             left: 30.0, right: 30.0, top: 10.0),
+                    //         child: _imageFile != null
+                    //             ? Image.file(_imageFile!)
+                    //             : IconButton(
+                    //                 icon: Icon(
+                    //                   Icons.add_a_photo,
+                    //                   size: 40,
+                    //                 ),
+                    //                 onPressed: pickImage,
+                    //               ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    uploadImageButton(context, widget.trashes),
                   ],
                 ),
               ),
@@ -265,7 +290,7 @@ class _TimbanganState extends State<Timbangan> {
     );
   }
 
-  Widget uploadImageButton(BuildContext context) {
+  Widget uploadImageButton(BuildContext context, List trashes) {
     return Container(
       child: Stack(
         children: <Widget>[
@@ -275,7 +300,95 @@ class _TimbanganState extends State<Timbangan> {
               height: 60,
               width: 388,
               child: ElevatedButton(
-                onPressed: () => uploadImageToFirebase(context),
+                onPressed: () {
+                  num result = 0;
+
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('Konfirmasi'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ...List.generate(trashes.length, (i) {
+                            result = result +
+                                trashes[i]['price'] * trashes[i]['weight'];
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(trashes[i]['subCategory'] +
+                                    ' - ' +
+                                    trashes[i]['weight'].toString() +
+                                    'Kg'),
+                                Text('Rp. ' +
+                                    (trashes[i]['price'] * trashes[i]['weight'])
+                                        .toString())
+                              ],
+                            );
+                          }).toList(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text('Total'), Text('Rp. $result')],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text('Biaya Admin'), Text('Rp. 500')],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Jumlah'),
+                              Text('Rp. ' + (result - 500).toString())
+                            ],
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                // String? url =
+                                //     await uploadImageToFirebase(context);
+
+                                await FirebaseFirestore.instance
+                                    .collection('swapTrashes')
+                                    .doc(widget.docId)
+                                    .update(
+                                  {
+                                    'status': "Selesai",
+                                    // 'proof': url,
+                                  },
+                                );
+
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(widget.userId)
+                                    .update(
+                                  {
+                                    'balance': FieldValue.increment(result),
+                                  },
+                                );
+
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop()
+                                  ..pop()
+                                  ..pop();
+                              },
+                              child: Text('Terima'),
+                              style: ElevatedButton.styleFrom(
+                                primary: const Color(0xFF375969),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF375969),
                   shape: RoundedRectangleBorder(

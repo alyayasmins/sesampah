@@ -49,147 +49,165 @@ class _PenarikanDiprosesState extends State<PenarikanDiproses> {
               body: ListView(
                 children: [
                   ...snapshot.data!.docs.map(
-                    (e) => Container(
-                      margin: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 30,
-                                width: 90,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xFF6FB2D2),
+                    (e) => FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(e.get('userId'))
+                          .get(),
+                      builder: (context,
+                          AsyncSnapshot<DocumentSnapshot<Map>> snapshot) {
+                        if (!snapshot.hasData) {
+                          return SizedBox();
+                        } else {
+                          return Container(
+                            margin: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Color(0xFF6FB2D2),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          e.get('status'),
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    e.get('status'),
-                                    style: TextStyle(
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Tanggal Penarikan",
+                                      style: TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Text(
+                                      formatedTanggal.toString(),
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Tanggal Penarikan",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Nama Pengguna",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Text(
+                                      snapshot.data!.data()!['fullName'],
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Text(
-                                formatedTanggal.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Nominal Penarikan",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Text(
+                                      e.get('nominal'),
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Nama Pengguna",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
+                                SizedBox(
+                                  height: 10,
                                 ),
-                              ),
-                              Text(
-                                fullName.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Nominal Penarikan",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Text(
-                                e.get('nominal'),
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              DetailPenarikanDiproses(
-                                                nominal: e.get('nominal'),
-                                                id: e.id,
-                                                doc: e,
-                                              ))));
-                                },
-                                child: Text(
-                                  "Lihat Detail",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 18,
-                                    color: Color(0xFF9E9E9E),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.end,
-                          //   children: [
-                          //     ElevatedButton(
-                          //       onPressed: () {
-                          //         FirebaseFirestore.instance
-                          //             .collection('balanceWithdraw')
-                          //             .doc(e.id)
-                          //             .update({'status': "Selesai"});
-                          //       },
-                          //       child: Text(
-                          //         "Terima",
-                          //         style: TextStyle(
-                          //           fontFamily: 'Poppins',
-                          //           fontSize: 18,
-                          //           color: Colors.white,
-                          //         ),
-                          //       ),
-                          //       style: ElevatedButton.styleFrom(
-                          //           primary: Color(0xFF6FB2D2)),
-                          //     )
-                          //   ],
-                          // )
-                        ],
-                      ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    DetailPenarikanDiproses(
+                                                      nominal: e.get('nominal'),
+                                                      id: e.id,
+                                                      fullName: snapshot.data!
+                                                          .data()!['fullName'],
+                                                      doc: e,
+                                                    ))));
+                                      },
+                                      child: Text(
+                                        "Lihat Detail",
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18,
+                                          color: Color(0xFF9E9E9E),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.end,
+                                //   children: [
+                                //     ElevatedButton(
+                                //       onPressed: () {
+                                //         FirebaseFirestore.instance
+                                //             .collection('balanceWithdraw')
+                                //             .doc(e.id)
+                                //             .update({'status': "Selesai"});
+                                //       },
+                                //       child: Text(
+                                //         "Terima",
+                                //         style: TextStyle(
+                                //           fontFamily: 'Poppins',
+                                //           fontSize: 18,
+                                //           color: Colors.white,
+                                //         ),
+                                //       ),
+                                //       style: ElevatedButton.styleFrom(
+                                //           primary: Color(0xFF6FB2D2)),
+                                //     )
+                                //   ],
+                                // )
+                              ],
+                            ),
+                          );
+                        }
+                      },
                     ),
                   )
                 ],
