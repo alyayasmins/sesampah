@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
 class dsSelesai extends StatefulWidget {
-  const dsSelesai({Key? key}) : super(key: key);
+  final String status;
+  final String fullName;
+  final List trashes;
+
+  const dsSelesai({
+    Key? key,
+    required this.status,
+    required this.fullName,
+    required this.trashes,
+  }) : super(key: key);
 
   @override
   State<dsSelesai> createState() => _dsSelesaiState();
@@ -50,7 +59,7 @@ class _dsSelesaiState extends State<dsSelesai> {
                       ),
                       child: Center(
                         child: Text(
-                          "data",
+                          widget.status,
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 16,
@@ -80,7 +89,7 @@ class _dsSelesaiState extends State<dsSelesai> {
                       ),
                     ),
                     Text(
-                      "data",
+                      widget.fullName,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 18,
@@ -88,43 +97,29 @@ class _dsSelesaiState extends State<dsSelesai> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Kertas Arsip",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      "data",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Berat",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      "data",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
+                Column(
+                  children: List.generate(widget.trashes.length, (index) {
+                    print(widget.trashes.length);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.trashes[index]['subCategory'],
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          widget.trashes[index]['price'].toString() + '/kg',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,7 +132,7 @@ class _dsSelesaiState extends State<dsSelesai> {
                       ),
                     ),
                     Text(
-                      "data",
+                      "Rp. 500",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 18,
@@ -157,7 +152,7 @@ class _dsSelesaiState extends State<dsSelesai> {
                       ),
                     ),
                     Text(
-                      "data",
+                      "0",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 18,

@@ -43,117 +43,150 @@ class _StatusSelesaiState extends State<StatusSelesai> {
             body: ListView(
               children: [
                 ...snapshot.data!.docs.map(
-                  (e) => Container(
-                    margin: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 30,
-                              // width: 90,
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Color(0xFF6FB2D2),
+                  (e) => FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(e.get('userId'))
+                        .get(),
+                    builder: (context,
+                        AsyncSnapshot<DocumentSnapshot<Map>> snapshot) {
+                      if (!snapshot.hasData) {
+                        return SizedBox();
+                      } else {
+                        return Container(
+                          margin: EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 30,
+                                    // width: 90,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Color(0xFF6FB2D2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        e.get('status'),
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: Center(
-                                child: Text(
-                                  e.get('status'),
-                                  style: TextStyle(
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Pengantaran",
+                                    style: TextStyle(
                                       fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    e.get('delivery'),
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Pengantaran",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Nama Pengguna",
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.data()!['fullName'],
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
+                              Column(
+                                children: List.generate(e.get('trash').length,
+                                    (index) {
+                                  print(e.get('trash').length);
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        e.get('trash')[index]['subCategory'],
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(
+                                        e
+                                                .get('trash')[index]['price']
+                                                .toString() +
+                                            '/kg',
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Nama Pengguna",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              "data",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => dsSelesai())));
-                              },
-                              child: Text(
-                                "Lihat Detail",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-                                  color: Color(0xFF9E9E9E),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => dsSelesai(
+                                            status: e.get('status'),
+                                            fullName: snapshot.data!
+                                                .data()!['fullName'],
+                                            trashes: e.get('trash'),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Lihat Detail",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        color: Color(0xFF9E9E9E),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
               ],
