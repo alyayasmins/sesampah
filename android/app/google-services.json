@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "408646463369",
+    "project_id": "loginauth-35f98",
+    "storage_bucket": "loginauth-35f98.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408646463369:android:54a312274f226bd904bb58",
+        "android_client_info": {
+          "package_name": "com.alyproject.sesampah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "408646463369-lqva3go9qkhta4fgss3dqfkt1vfh3icf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVb2PQCfAPISf5Gph27FNqYFk4PmvfwV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408646463369-lqva3go9qkhta4fgss3dqfkt1vfh3icf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
